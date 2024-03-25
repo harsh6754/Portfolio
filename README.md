@@ -96,26 +96,26 @@ NEXT_PUBLIC_EMAILJS_TEMPLATE_ID =
 NEXT_PUBLIC_EMAILJS_PUBLIC_KEY =
 ```
 
-### Then, Customize data in the `utils/data` [folder](https://github.com/said7388/developer-portfolio/tree/main/utils/data).
+### Then, Customize data in the `utils/data` [folder](https://github.com/harsh/Portfolio/tree/main/utils/data).
 
 Eg:
 
 ```javascript
 export const personalData = {
-  name: "ABU SAID",
+  name: "Harsh Agrawal",
   profile: "/profile.png",
   designation: "Full-Stack Software Developer",
-  description: "My name is ABU SAID....",
-  email: "abusaid7388@gmail.com",
-  phone: "+8801608797655",
-  address: "Dhaka, Bangladesh",
-  github: "https://github.com/said7388",
-  facebook: "https://www.facebook.com/abusaid.riyaz/",
-  linkedIn: "https://www.linkedin.com/in/abu-said-bd/",
-  twitter: "https://twitter.com/said7388",
-  stackOverflow: "https://stackoverflow.com/users/16840768/abu-said",
-  leetcode: "https://leetcode.com/said3812/",
-  devUsername: "said7388",
+  description: "My name is Harsh Agrawal....",
+  email: "agrawalharsh1028@gmail.com",
+  phone: "+91-9636504390",
+  address: "",
+  github: "https://github.com/harsh6754",
+  facebook: "https://www.facebook.com",
+  linkedIn: "https://www.linkedin.com/in/harsh2810/",
+  twitter: "https://twitter.com",
+  stackOverflow: "https://stackoverflow.com/users/",
+  leetcode: "https://leetcode.com/h_agrawal6754/",
+  devUsername: "",
   resume: "...",
 };
 ```
