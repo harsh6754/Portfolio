@@ -1,5 +1,6 @@
 export const skillsData = [
-  'C/C++',
+  'C',
+  'C++',
   'Python',
   'Java',
   'HTML',
@@ -11,11 +12,11 @@ export const skillsData = [
   'MongoDB',
   'MySQL',
   'Git',
-  'XML',
   'Bootstrap',
   'Figma',
   'Firebase',
   'MaterialUI',
+  'Microsoft Office',
   
 ]
 
