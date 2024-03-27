@@ -17,6 +17,7 @@ export const skillsData = [
   'Firebase',
   'MaterialUI',
   'Microsoft Office',
+  'ViteJS',
   
 ]
 
