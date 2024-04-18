@@ -12,6 +12,6 @@ export const achivement = [
     {
         id:"3",
         title:"Dare to Code",
-        award:"Semi-finalist candiate among All Cse Student"
+        award:"Semi-finalist candidate among All Cse Student"
     }
 ]
