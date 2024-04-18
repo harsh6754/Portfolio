@@ -8,6 +8,8 @@ import HeroSection from "./components/homepage/hero-section";
 import Projects from "./components/homepage/projects";
 import Skills from "./components/homepage/skills";
 import Achivement from "./components/homepage/achivement";
+import Certificate from "./components/homepage/pages/Certificate";
+import achivement from "./components/homepage/pages/achivement";
 
 async function getData() {
   const res = await fetch(`https://dev.to/api/articles?username=${personalData.devUsername}`)

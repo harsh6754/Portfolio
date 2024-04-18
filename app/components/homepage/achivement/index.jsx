@@ -5,10 +5,11 @@ import AnimationLottie from "../../helper/animation-lottie";
 import GlowCard from "../../helper/glow-card";
 import experience from '/public/lottie/code.json'
 import { BsFillAwardFill } from "react-icons/bs";
+import { TbCertificate } from "react-icons/tb";
 
 
 
-function Achivement ()  {
+function Achivement() {
   return (
     <div id="achivement" className="relative z-50 border-t my-12 lg:my-24 border-[#25213b]">
       <Image
@@ -67,7 +68,22 @@ function Achivement ()  {
                   </GlowCard>
                 ))
               }
+              <GlowCard>
+                <div className='flex items-center justify-evenly gap-6 '>
+                  <div className='flex items-center cursor-pointer p-6 gap-2 transition-all duration-300 hover:scale-125'>
+                    <TbCertificate size={26} />
+                    <button>Certificate</button>
+                  </div>
+                  <div className='flex items-center cursor-pointer p-6 gap-2 transition-all duration-300 hover:scale-125'>
+                    <BsFillAwardFill size={26}/>
+                    <button >Achivement</button>
+                  </div>
+                  {/* <button className='flex transition-all duration-300 hover:scale-125'><TbCertificate size={26} />Certificate</button>
+                    <button>Achivement</button> */}
+                </div>
+              </GlowCard>
             </div>
+
           </div>
         </div>
       </div>
