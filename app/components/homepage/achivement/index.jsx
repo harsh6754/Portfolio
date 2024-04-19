@@ -73,11 +73,11 @@ function Achivement() {
                 <div className='flex items-center justify-evenly gap-4 p-4'>
                   <div className='flex items-center cursor-pointer  gap-2 md:p-6 transition-all duration-300 hover:scale-125 '>
                     <TbCertificate size={26} />
-                    <button>Certificate</button>
+                    <p>Certificate</p>
                   </div>
                   <div className='flex items-center cursor-pointer  gap-2 md:p-6 transition-all duration-300 hover:scale-125 '>
                     <BsFillAwardFill size={26}/>
-                    <button >Achivement</button>
+                    <p>Achivement</p>
                   </div>
                   {/* <button className='flex transition-all duration-300 hover:scale-125'><TbCertificate size={26} />Certificate</button>
                     <button>Achivement</button> */}
