@@ -68,13 +68,14 @@ function Achivement() {
                   </GlowCard>
                 ))
               }
+          
               <GlowCard>
-                <div className='flex items-center justify-evenly gap-6 '>
-                  <div className='flex items-center cursor-pointer p-6 gap-2 transition-all duration-300 hover:scale-125'>
+                <div className='flex items-center justify-evenly gap-4'>
+                  <div className='flex items-center cursor-pointer  gap-2 md:p-6 transition-all duration-300 hover:scale-125 '>
                     <TbCertificate size={26} />
                     <button>Certificate</button>
                   </div>
-                  <div className='flex items-center cursor-pointer p-6 gap-2 transition-all duration-300 hover:scale-125'>
+                  <div className='flex items-center cursor-pointer  gap-2 md:p-6 transition-all duration-300 hover:scale-125 '>
                     <BsFillAwardFill size={26}/>
                     <button >Achivement</button>
                   </div>
@@ -82,6 +83,7 @@ function Achivement() {
                     <button>Achivement</button> */}
                 </div>
               </GlowCard>
+            
             </div>
 
           </div>
