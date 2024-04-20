@@ -139,8 +139,32 @@ import emailjs from '@emailjs/browser'; // Update import
 import { useState } from 'react';
 import { BsArrowRightShort } from "react-icons/bs"; // Update icon import
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRef } from 'react';
 
 function ContactForm() {
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        'service_4h4sako', // Corrected environment variable usage
+        'template_o6sym37', // Corrected environment variable usage
+        form.current,
+        '1up9aB2deQPU1J8wG', // Corrected environment variable usage
+      ).then(
+        () => {
+          console.log('SUCCESS!');
+          toast.success('Email sent Successfully!');
+        },
+        (error) => {
+          console.log('FAILED...', error.text);
+          toast.error('Failed to send email!');
+        },
+      );
+  };
   const [input, setInput] = useState({
     name: '',
     email: '',
@@ -203,6 +227,7 @@ function ContactForm() {
             <input
               className="bg-[#10172d] w-full border rounded-md border-[#353a52] focus:border-[#16f2b3] ring-0 outline-0 transition-all duration-300 px-3 py-2"
               type="text"
+              name="user_name"
               maxLength="100"
               required={true}
               onChange={(e) => setInput({ ...input, name: e.target.value })}
@@ -211,55 +236,61 @@ function ContactForm() {
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-base">Email: </label>
-            <input
-              className="bg-[#10172d] w-full border rounded-md border-[#353a52] focus:border-[#16f2b3] ring-0 outline-0 transition-all duration-300 px-3 py-2"
-              type="email"
-              maxLength="100"
-              required={true}
-              value={input.email}
-              onChange={(e) => setInput({ ...input, email: e.target.value })}
-              onBlur={() => {
-                checkRequired();
-                setError({ ...error, email: !isValidEmail(input.email) });
-              }}
-            />
-            {error.email &&
-              <p className="text-sm text-red-400">Please provide a valid email!</p>
-            }
-          </div>
+          <form ref={form} onSubmit={sendEmail}>
+            <div className="flex flex-col gap-2">
+              <label className="text-base">Email: </label>
+              <input
+                className="bg-[#10172d] w-full border rounded-md border-[#353a52] focus:border-[#16f2b3] ring-0 outline-0 transition-all duration-300 px-3 py-2"
+                type="email"
+                name="user_email"
+                maxLength="100"
+                required={true}
+                value={input.email}
+                onChange={(e) => setInput({ ...input, email: e.target.value })}
+                onBlur={() => {
+                  checkRequired();
+                  setError({ ...error, email: !isValidEmail(input.email) });
+                }}
+              />
+              {error.email &&
+                <p className="text-sm text-red-400">Please provide a valid email!</p>
+              }
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-base">Message: </label>
-            <textarea
-              className="bg-[#10172d] w-full border rounded-md border-[#353a52] focus:border-[#16f2b3] ring-0 outline-0 transition-all duration-300 px-3 py-2"
-              maxLength="500"
-              name="message"
-              required={true}
-              onChange={(e) => setInput({ ...input, message: e.target.value })}
-              onBlur={checkRequired}
-              rows="4"
-              value={input.message}
-            />
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            {error.required &&
-              <p className="text-sm text-red-400">
-                Email and Message are required!
-              </p>
-            }
-            <button
-              className="flex items-center gap-1 hover:gap-3 rounded-full bg-gradient-to-r from-pink-500 to-violet-600 px-5 md:px-12 py-2.5 md:py-3 text-center text-xs md:text-sm font-medium uppercase tracking-wider text-white no-underline transition-all duration-200 ease-out hover:text-white hover:no-underline md:font-semibold"
-              role="button"
-              onClick={handleSendMail}
-            >
-              <span>Send Message</span>
-              <BsArrowRightShort className="mt-1" size={18} />
-            </button>
-          </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-base">Message: </label>
+              <textarea
+                className="bg-[#10172d] w-full border rounded-md border-[#353a52] focus:border-[#16f2b3] ring-0 outline-0 transition-all duration-300 px-3 py-2"
+                maxLength="500"
+                name="message"
+                required={true}
+                onChange={(e) => setInput({ ...input, message: e.target.value })}
+                onBlur={checkRequired}
+                rows="4"
+                value={input.message}
+              />
+            </div>
+            <div className="flex flex-col items-center gap-2 mt-5">
+              {error.required &&
+                <p className="text-sm text-red-400">
+                  Email and Message are required!
+                </p>
+              }
+              <button
+                className="flex items-center gap-1 hover:gap-3 rounded-full bg-gradient-to-r from-pink-500 to-violet-600 px-5 md:px-12 py-2.5 md:py-3 text-center text-xs md:text-sm font-medium uppercase tracking-wider text-white no-underline transition-all duration-200 ease-out hover:text-white hover:no-underline md:font-semibold"
+                role="button"
+                onClick={handleSendMail}
+                value={"Send"}
+              >
+                <span>Send Message</span>
+                <BsArrowRightShort className="mt-0" size={25} />
+              </button>
+            </div>
+          </form>
         </div>
+
       </div>
+
     </div>
   );
 };
