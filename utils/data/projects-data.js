@@ -8,7 +8,7 @@ export const projectsData = [
         id: 1,
         name: 'Apna-Music',
         description: "Me and my team built an Apna-Music mobile application. I have developed API using Express, Node.Js, AWS, and MongoDB. Used OTP via AWS SES, Google, and Facebook for the authentication system.",
-        tools: ['Express', 'MongoDB', 'OpenAI API', 'AWS SES', 'React.Js', 'Node Mailer', 'Node.Js', 'Tailwind'],
+        tools: ['Express', 'MongoDB', 'OpenAI API','React.Js', 'Node Mailer', 'Node.Js', 'Tailwind'],
         role: 'Hander Both Frontend & Backend',
         code: '',
         demo: '',
