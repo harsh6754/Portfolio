@@ -4,9 +4,10 @@ import { isValidEmail } from '@/utils/check-email';
 import emailjs from '@emailjs/browser'; // Update import
 import { useState } from 'react';
 import { BsArrowRightShort } from "react-icons/bs"; // Update icon import
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRef } from 'react';
+import styled from 'styled-components';
 
 function ContactForm() {
   const form = useRef();
@@ -78,8 +79,110 @@ function ContactForm() {
     };
   };
 
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
+
   return (
-    <div className="">
+    <div className="w-full h-auto flex flex-col">
+     <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase">
+        Contact with me
+      </p>
+      <div className="max-w-3xl text-white rounded-lg border border-[#464c6a] p-3 lg:p-5">
+        <p className="text-sm text-[#d3d8e8]">
+          {"If you have any questions or concerns, please don't hesitate to contact me. I am open to any work opportunities that align with my skills and interests."}
+        </p>
+       <Container>
+        <StyledContactForm>
+          <form ref={form} onSubmit={sendEmail}>
+            <label>Name</label>
+            <input type="text" name="user_name"  onChange={handleChange} />
+            <label>Email</label>
+            <input type="email" name="user_email"  onChange={handleChange}/>
+            <label>Message</label>
+            <textarea name="message" onChange={handleChange} />
+            <input type="submit" value="Send" />
+          </form>
+        </StyledContactForm>
+      </Container>
+      </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </div>
+  );
+};
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 87.3vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+const StyledContactForm = styled.div`
+  width: 400px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 15px;
+
+  form {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+    font-size: 16px;
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 7px;
+      margin-bottom: 10px;
+      outline: none;
+      border-radius: 5px;
+      border: 1px solid rgb(220, 220, 220);
+      color:black;
+
+      &:focus {
+        border: 2px solid rgba(0, 206, 158, 1);
+      }
+    }
+
+    textarea {
+      min-height: 100px;
+      max-height: 100px;
+    }
+
+    label {
+      margin-top: 1rem;
+      color:black;
+    }
+
+    input[type='submit'] {
+      margin-top: 2rem;
+      cursor: pointer;
+      background: rgb(249, 105, 14);
+      color: black;
+      border: none;
+
+    }
+  }
+`;
+   {/* <div className="">
       <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase">
         Contact with me
       </p>
@@ -155,10 +258,10 @@ function ContactForm() {
           </form>
         </div>
 
-      </div>
+      </div> 
 
     </div>
   );
-};
+};*/}
 
 export default ContactForm;
