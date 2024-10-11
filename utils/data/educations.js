@@ -3,8 +3,8 @@ export const educations = [
     id: 1,
     title: "Bachelor's Degree",
     duration: "2021 - Present",
-    institution: "Parul University, Vadodara",
-    CGPA: "CGPA :- 7.5",
+    institution: "Parul University, Vadodara, Gujarat",
+    CGPA: "CGPA :- 7.54",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ export const educations = [
   {
     id: 3,
     title: "Secondary School",
-    duration: "2009 - 2019",
+    duration: "2018 - 2019",
     institution: "Modern Wisdom Senior Secondary School",
     CGPA: "Percentage :- 80.83%",
   }
