@@ -75,6 +75,8 @@ import wordpress from '/public/svg/skills/wordpress.svg';
 import nodejs from '/public/svg/skills/nodejs.svg';
 import redis from '/public/svg/skills/redis.svg';
 import expressjs from '/public/svg/skills/expressjs.svg';
+import jquery from '/public/svg/skills/jquery.svg';
+import postman from '/public/svg/skills/postman.svg';
 
 
 
@@ -235,6 +237,10 @@ export const skillsImage = (skill) => {
       return redis;
     case 'express.js':
       return expressjs;
+    case 'jquery':
+      return jquery;
+    case 'postman':
+      return postman;
     default:
       break;
   }

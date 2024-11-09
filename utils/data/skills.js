@@ -23,7 +23,9 @@ export const skillsData = [
   'Node.js',
   'Express.js',
   'Docker',
-  'AWS'
+  'AWS',
+  'jQuery',
+  'Postman',
 ]
 
 // Choose your skills from below. Make sure it's in the same format and spelled correctly.
