@@ -21,7 +21,7 @@ export const projectsData = [
         tools: ['React', 'Node', 'Express', 'MongoDB', 'TailwindCSS', 'Docker', 'AWS', 'jQuery', 'Redis'],
         role: 'Full Stack Developer',
         code: 'https://github.com/harsh6754/E-Waste-Trade-Hub',
-        demo: '',
+        demo: 'https://startup-seven-lovat.vercel.app/',
         image: '', // Add image if available
     },
     {
