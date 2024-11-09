@@ -18,7 +18,12 @@ export const skillsData = [
   'MaterialUI',
   'Microsoft Office',
   'ViteJS',
-  
+  'Redis',
+  'Angular',
+  'Node.js',
+  'Express.js',
+  'Docker',
+  'AWS'
 ]
 
 // Choose your skills from below. Make sure it's in the same format and spelled correctly.

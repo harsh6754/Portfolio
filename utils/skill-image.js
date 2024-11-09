@@ -72,6 +72,10 @@ import vuetifyjs from '/public/svg/skills/vuetifyjs.svg';
 import webix from '/public/svg/skills/webix.svg';
 import wolframalpha from '/public/svg/skills/wolframalpha.svg';
 import wordpress from '/public/svg/skills/wordpress.svg';
+import nodejs from '/public/svg/skills/nodejs.svg';
+import redis from '/public/svg/skills/redis.svg';
+import expressjs from '/public/svg/skills/expressjs.svg';
+
 
 
 export const skillsImage = (skill) => {
@@ -225,6 +229,12 @@ export const skillsImage = (skill) => {
       return wolframalpha;
     case 'canva':
       return canva;
+    case 'node.js':
+      return nodejs;
+    case 'redis':
+      return redis;
+    case 'express.js':
+      return expressjs;
     default:
       break;
   }

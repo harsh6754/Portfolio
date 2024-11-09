@@ -2,7 +2,7 @@ export const personalData = {
   name: "Harsh Agrawal",
   profile: '/profile.png',
   designation: "Full Stack Developer ",
-  description: "My name is Harsh Agrawal. I am a professional and enthusiastic programmer in my daily life. I am a quick learner with a self-learning attitude. I love to learn and explore new technologies and am passionate about problem-solving. I love almost all the stacks of web application development and love to make the web more open to the world. My core skill is based on JavaScript and I love to do most of the things using JavaScript. I am available for any kind of job opportunity that suits my skills and interests.",
+  description: "My name is Harsh Agrawal, a highly motivated software engineer with a strong foundation in JavaScript and a passion for building efficient, user-centered web applications. I thrive in dynamic environments, where I can apply my problem-solving skills and continually expand my technical expertise. Known for my quick learning and self-driven approach, I enjoy exploring new technologies and innovating to make the web more accessible and impactful. My experience spans full-stack web development, and I am particularly skilled in crafting robust, scalable applications that deliver a seamless user experience.I am currently seeking opportunities that leverage my strengths in JavaScript and web development to make a meaningful impact. I am eager to contribute to projects where I can grow alongside a talented team and drive results through innovation and dedication.",
   email: 'agrawalharsh1028@gmail.com',
   phone: '+91-9636504390',
   address: '107 Shrimal Nagar, Bhinmal, Jalore - 343029, Rajasthan, India ',
