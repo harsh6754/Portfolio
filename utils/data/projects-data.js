@@ -6,23 +6,23 @@ import travel from '/public/image/travel.jpg';
 export const projectsData = [
     {
         id: 1,
-        name: 'Apna-Music',
-        description: "Me and my team built an Apna-Music mobile application. I have developed API using Express, Node.Js, AWS, and MongoDB. Used OTP via AWS SES, Google, and Facebook for the authentication system.",
-        tools: ['Express', 'MongoDB', 'OpenAI API','React.Js', 'Node Mailer', 'Node.Js', 'Tailwind'],
-        role: 'Hander Both Frontend & Backend',
-        code: '',
-        demo: '',
-        image: crefin,
+        name: 'My-Book-Store',
+        description: "Crafted a website enabling users to buy and sell used books to book lovers. Users can explore a book catalog, add books to their wishlist, sell books, and complete purchases via a payment link. Includes a recommendation engine for suggesting books based on search queries and price recommendations for sellers. Added a messaging feature to request unavailable books, notifying users who may wish to sell.",
+        tools: ['React.js', 'TailwindCSS', 'Node.js', 'Express.js', 'MongoDB', 'FirebaseAuth', 'Docker'],
+        role: 'Full Stack Developer',
+        code: 'https://github.com/harsh6754/My-Book-Store',
+        demo: 'https://my-book-store-seven.vercel.app/',
+        image: '', // Add image if available
     },
     {
         id: 2,
-        name: 'Travel Agency App',
-        description: 'I have designed and developed a full-stack web app for 2Expedition, a travel agency in Armenia. I created the UI using NextJS, Typescript, MUI, TailwindCSS, Google Maps, Sun-Editor, and React Slick. The app supports multiple languages and currencies. I developed the API using NestJS, Typescript, MySQL, TypeORM, AWS, and Nodemailer. I deployed the front-end app to AWS Amplify and the back-end app to AWS EC2.',
-        tools: ['NextJS', 'Tailwind CSS', "Google Maps", "NestJS", "TypeScript", "MySQL", "AWS S3", "Sun-Editor", "Gmail Passkey"],
+        name: 'E-Waste Trade Hub',
+        description: "Developed a dynamic platform for e-waste trading under Smart India Hackathon. Features a three-tier authentication system for buyers, sellers, and large buyers. Sellers can upload e-waste photos, and buyers submit offers. Integrates offer acceptance/decline, redeemable points for transactions, and multilingual support for English and local languages.",
+        tools: ['React', 'Node', 'Express', 'MongoDB', 'TailwindCSS', 'Docker', 'AWS', 'jQuery', 'Redis'],
         role: 'Full Stack Developer',
-        code: '',
+        code: 'https://github.com/harsh6754/E-Waste-Trade-Hub',
         demo: '',
-        image: travel,
+        image: '', // Add image if available
     },
     {
         id: 3,
