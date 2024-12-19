@@ -7,6 +7,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        lightMove: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '100%': { backgroundPosition: '200% 50%' },
+        },
+      },
+      animation: {
+        borderLight: 'lightMove 3s linear infinite',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
