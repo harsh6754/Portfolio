@@ -163,17 +163,18 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 87.3vh;
+  height: 85.3vh;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 `;
 
 const StyledContactForm = styled.div`
-  width: 400px;
+  width: 100%;
+  height: 93%;
   background-color: white;
   padding: 20px;
-  border-radius: 15px;
+  border-radius:25px;
 
   form {
     display: flex;
