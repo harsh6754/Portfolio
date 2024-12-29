@@ -3,11 +3,9 @@ import { achivement } from '@/utils/data/achivement';
 import Image from "next/image";
 import AnimationLottie from "../../helper/animation-lottie";
 import GlowCard from "../../helper/glow-card";
-import experience from '/public/lottie/code.json'
+import experience from '/public/lottie/education.json'
 import { BsFillAwardFill } from "react-icons/bs";
 import { TbCertificate } from "react-icons/tb";
-
-
 
 function Achivement() {
   return (
