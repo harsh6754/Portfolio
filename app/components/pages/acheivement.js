@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 const achievements = [
   {
@@ -33,13 +34,23 @@ const achievements = [
 
 const Achievement = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen  rounded-xl text-white">
+    <Image
+            src="/section.svg"
+            alt="Hero"
+            width={1572}
+            height={795}
+            className="absolute top-0 -z-10"
+          />
       {/* Header */}
-      <div className="py-10 text-center">
-        <h1 className="text-4xl font-bold text-pink-600">My Achievements</h1>
-        <p className="mt-2 text-lg text-gray-400">
-          A glimpse of my milestones and recognitions.
-        </p>
+      <div className="flex justify-center my-5 lg:py-8">
+        <div className="flex  items-center">
+          <span className="w-24 h-[2px] bg-[#1a1443]"></span>
+          <span className="bg-[#1a1443] w-fit text-white p-2 px-5 text-xl rounded-md">
+            My Achivement
+          </span>
+          <span className="w-24 h-[2px] bg-[#1a1443]"></span>
+        </div>
       </div>
 
       {/* Achievement Cards */}

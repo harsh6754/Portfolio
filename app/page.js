@@ -36,9 +36,9 @@ export default async function Home() {
       <AboutSection />
       <Experience />
       <Achivement/>
+      <Achievement/>
       <Skills />
       <Certificate/>
-      <Achievement/>
       <Projects />
       <Education />
       <Blog blogs={blogs} />

@@ -23,15 +23,16 @@ const certificates = [
 
 const Certificate = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-auto rounded-xl text-white">
       {/* Header */}
-      <div className="py-10 text-center">
-        <h1 className="text-4xl font-bold tracking-wide text-pink-600">
-          My Certificates
-        </h1>
-        <p className="mt-2 text-lg text-gray-300">
-          A showcase of my achievements and expertise.
-        </p>
+      <div className="flex justify-center my-5 lg:py-8">
+        <div className="flex  items-center">
+          <span className="w-24 h-[2px] bg-[#1a1443]"></span>
+          <span className="bg-[#1a1443] w-fit text-white p-2 px-5 text-xl rounded-md">
+            Certificates 
+          </span>
+          <span className="w-24 h-[2px] bg-[#1a1443]"></span>
+        </div>
       </div>
 
       {/* Certificate Cards */}
