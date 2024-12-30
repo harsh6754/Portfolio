@@ -8,6 +8,8 @@ import HeroSection from "./components/homepage/hero-section";
 import Projects from "./components/homepage/projects";
 import Skills from "./components/homepage/skills";
 import Achivement from "./components/homepage/achivement";
+import Certificate from "./components/pages/certificate";
+import Achievement from "./components/pages/acheivement";
 
 
 
@@ -35,6 +37,8 @@ export default async function Home() {
       <Experience />
       <Achivement/>
       <Skills />
+      <Certificate/>
+      <Achievement/>
       <Projects />
       <Education />
       <Blog blogs={blogs} />
