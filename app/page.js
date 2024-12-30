@@ -8,8 +8,6 @@ import HeroSection from "./components/homepage/hero-section";
 import Projects from "./components/homepage/projects";
 import Skills from "./components/homepage/skills";
 import Achivement from "./components/homepage/achivement";
-import CertificatePage from "./components/pages/certificate";
-import AchievementPage from "./components/pages/achievement";
 
 
 
