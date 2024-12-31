@@ -1,4 +1,7 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import Image from "next/image";
 
 const certificates = [
   {
@@ -22,14 +25,31 @@ const certificates = [
 ];
 
 const Certificate = () => {
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
+
+  const handleOpenModal = (certificate) => {
+    setSelectedCertificate(certificate);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCertificate(null);
+  };
+
   return (
     <div className="min-h-auto rounded-xl text-white">
+    <Image
+            src="/section.svg"
+            alt="Hero"
+            width={1572}
+            height={795}
+            className="absolute top-0 -z-10"
+          />
       {/* Header */}
       <div className="flex justify-center my-5 lg:py-8">
-        <div className="flex  items-center">
+        <div className="flex items-center">
           <span className="w-24 h-[2px] bg-[#1a1443]"></span>
           <span className="bg-[#1a1443] w-fit text-white p-2 px-5 text-xl rounded-md">
-            Certificates 
+            Certificates
           </span>
           <span className="w-24 h-[2px] bg-[#1a1443]"></span>
         </div>
@@ -61,12 +81,45 @@ const Certificate = () => {
             </div>
 
             {/* Hover Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center bg-pink-600 bg-opacity-75 text-center text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-pink-600 bg-opacity-75 text-center text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 cursor-pointer"
+              onClick={() => handleOpenModal(certificate)}
+            >
               <p className="px-4 text-lg font-bold">View Certificate</p>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Modal */}
+      {selectedCertificate && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-300"
+          onClick={handleCloseModal}
+        >
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative"
+            onClick={(e) => e.stopPropagation()} // Prevent modal close on inner click
+          >
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-black"
+              onClick={handleCloseModal}
+            >
+              ✕
+            </button>
+            <img
+              src={selectedCertificate.image}
+              alt={selectedCertificate.title}
+              className="w-full rounded-md"
+            />
+            <h3 className="mt-4 text-xl font-bold text-black">
+              {selectedCertificate.title}
+            </h3>
+            <p className="text-gray-600">{selectedCertificate.date}</p>
+            <p className="mt-2 text-gray-700">{selectedCertificate.description}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
