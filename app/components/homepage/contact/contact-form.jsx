@@ -75,22 +75,30 @@ function ContactForm() {
 
   const handleSendMail = async (e) => {
     e.preventDefault();
-    if (!input.email || !input.message || !input.name) {
+  
+    // Check if any field is empty
+    if (!input.name || !input.email || !input.message) {
       setError({ ...error, required: true });
+      toast.error('All fields are required!'); // Show toast message
       return;
-    } else if (error.email) {
+    }
+  
+    // Validate email format
+    if (error.email) {
+      toast.error('Please provide a valid email address!');
       return;
-    } else {
-      setError({ ...error, required: false });
-    };
-
+    }
+  
+    // All validations passed
+    setError({ ...error, required: false });
+  
     const serviceID = "service_4h4sako";
     const templateID = "template_o6sym37";
     const userID = "1up9aB2deQPU1J8wG";
-
+  
     try {
       const res = await emailjs.send(serviceID, templateID, input, userID);
-
+  
       if (res.status === 200) {
         toast.success('Message sent successfully!');
         setInput({
@@ -98,11 +106,12 @@ function ContactForm() {
           email: '',
           message: '',
         });
-      };
+      }
     } catch (error) {
-      toast.error(error?.text || error);
-    };
+      toast.error(error?.text || 'Failed to send message!');
+    }
   };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -134,11 +143,11 @@ function ContactForm() {
           <StyledContactForm>
             <form ref={form} onSubmit={sendEmail}>
               <label>Name</label>
-              <input type="text" name="user_name" onChange={handleChange} />
+              <input type="text" name="user_name" onChange={handleChange} required/>
               <label>Email</label>
-              <input type="email" name="user_email" onChange={handleChange} />
+              <input type="email" name="user_email" onChange={handleChange} required/>
               <label>Message</label>
-              <textarea name="message" onChange={handleChange} />
+              <textarea name="message" onChange={handleChange} required/>
               <input type="submit" value="Send" />
             </form>
           </StyledContactForm>
