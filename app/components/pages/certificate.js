@@ -36,12 +36,12 @@ const Certificate = () => {
   };
 
   return (
-    <div className="min-h-auto rounded-xl text-white">
+    <div className="min-h-screen relative rounded-xl text-white">
     <Image
             src="/section.svg"
             alt="Hero"
             width={1572}
-            height={795}
+            height={850}
             className="absolute top-0 -z-10"
           />
       {/* Header */}
