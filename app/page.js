@@ -10,6 +10,7 @@ import Skills from "./components/homepage/skills";
 import Achivement from "./components/homepage/achivement";
 import Certificate from "./components/pages/certificate";
 import Achievement from "./components/pages/acheivement";
+import Techno from "./components/Technologies/skill";
 
 
 
@@ -39,6 +40,7 @@ export default async function Home() {
       <Achievement/>
       <Skills />
       <Certificate/>
+      <Techno/>
       <Projects />
       <Education />
       <Blog blogs={blogs} />

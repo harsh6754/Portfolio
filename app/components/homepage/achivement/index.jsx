@@ -69,7 +69,7 @@ function Achivement() {
 
               <GlowCard>
                 <div className='flex items-center justify-evenly gap-4 p-3'>
-                  <a href="" target="_blank" rel="noopener noreferrer">
+                  <a href="#" target="_blank" rel="noopener noreferrer">
                     <div className='flex items-center gap-2 md:p-6 transition-all duration-300 hover:scale-125 '>
                       <TbCertificate size={30} className='text-violet-500 ' />
                       <p className='cursor-pointer'>Certificate</p>
