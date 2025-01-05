@@ -118,6 +118,7 @@ const Techno = () => {
 
       {/* Charts Section */}
       <div className="flex flex-wrap justify-around items-start gap-10 p-5">
+      
         {/* Donut Chart */}
         <div className="w-full md:w-1/2 lg:w-1/3">
           <Doughnut data={chartData} />
