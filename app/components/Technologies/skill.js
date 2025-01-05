@@ -16,7 +16,7 @@ const Techno = () => {
     progressBarRef.current?.continuousStart(0);
     const timer = setTimeout(() => {
       progressBarRef.current?.complete();
-    }, 2000); // Simulating loading completion after 2 seconds
+    }, 2000); 
     return () => clearTimeout(timer);
   }, []);
 
@@ -118,7 +118,7 @@ const Techno = () => {
 
       {/* Charts Section */}
       <div className="flex flex-wrap justify-around items-start gap-10 p-5">
-      
+
         {/* Donut Chart */}
         <div className="w-full md:w-1/2 lg:w-1/3">
           <Doughnut data={chartData} />
