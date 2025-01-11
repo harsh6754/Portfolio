@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, memo } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
 const achievements = [
@@ -9,7 +9,7 @@ const achievements = [
     description:
       "Achieved a rating of 1786 on LeetCode, showcasing advanced problem-solving skills.",
     icon: "🌟",
-    certificateImage: "/image/ayla.jpg",
+    certificateImage: "/image/ayla.jpg", // Add image path
   },
   {
     title: "Global Rank 2063",
@@ -17,7 +17,7 @@ const achievements = [
     description:
       "Ranked 2063 globally out of 30,000+ participants in a competitive programming contest.",
     icon: "🌍",
-    certificateImage: "/image/crefin.jpg",
+    certificateImage: "/image/crefin.jpg", // Add image path
   },
   {
     title: "Code Debugging Competition Finalist",
@@ -25,7 +25,7 @@ const achievements = [
     description:
       "Advanced to the final round among the top 10,000+ participants in a debugging competition.",
     icon: "🐛",
-    certificateImage: "/image/real-estate.jpg",
+    certificateImage: "/image/real-estate.jpg", // Add image path
   },
   {
     title: "SSIP Certification",
@@ -33,45 +33,9 @@ const achievements = [
     description:
       "Awarded for presenting innovative, high-impact project ideas contributing to a startup initiative.",
     icon: "🏆",
-    certificateImage: "/image/travel.jpg",
+    certificateImage: "/image/travel.jpg", // Add image path
   },
 ];
-
-const AchievementModal = memo(({ achievement, onClose }) => {
-  if (!achievement) return null;
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-black"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-        <Image
-          src={achievement.certificateImage}
-          alt={achievement.title}
-          width={400}
-          height={400}
-          className="w-full rounded-md"
-          loading="lazy"
-        />
-        <h3 className="mt-4 text-xl font-bold text-black">
-          {achievement.title}
-        </h3>
-        <p className="text-gray-600">{achievement.date}</p>
-        <p className="mt-2 text-gray-700">{achievement.description}</p>
-      </div>
-    </div>
-  );
-});
 
 const Achievement = () => {
   const [selectedAchievement, setSelectedAchievement] = useState(null);
@@ -88,11 +52,10 @@ const Achievement = () => {
     <div className="min-h-screen relative rounded-xl text-white">
       <Image
         src="/section.svg"
-        alt="Background Section"
+        alt="Hero"
         width={1572}
         height={795}
         className="absolute top-0 -z-10"
-        loading="lazy"
       />
 
       {/* Header */}
@@ -132,10 +95,36 @@ const Achievement = () => {
       </div>
 
       {/* Modal */}
-      <AchievementModal
-        achievement={selectedAchievement}
-        onClose={handleCloseModal}
-      />
+      {selectedAchievement && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300"
+          onClick={handleCloseModal}
+        >
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative"
+            onClick={(e) => e.stopPropagation()} // Prevent modal close on inner click
+          >
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-black"
+              onClick={handleCloseModal}
+            >
+              ✕
+            </button>
+            <Image
+              src={selectedAchievement.certificateImage}
+              alt={selectedAchievement.title}
+              width={400}
+              height={400}
+              className="w-full rounded-md"
+            />
+            <h3 className="mt-4 text-xl font-bold text-black">
+              {selectedAchievement.title}
+            </h3>
+            <p className="text-gray-600">{selectedAchievement.date}</p>
+            <p className="mt-2 text-gray-700">{selectedAchievement.description}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
