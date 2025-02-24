@@ -26,6 +26,9 @@ export const skillsData = [
   'AWS',
   'jQuery',
   'Postman',
+  'C#',
+  // 'ASP.Net Wep API',
+  // 'Asp.Net Core MVC',
 ]
 
 // Choose your skills from below. Make sure it's in the same format and spelled correctly.

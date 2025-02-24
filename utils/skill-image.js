@@ -77,6 +77,8 @@ import redis from '/public/svg/skills/redis.svg';
 import expressjs from '/public/svg/skills/expressjs.svg';
 import jquery from '/public/svg/skills/jquery.svg';
 import postman from '/public/svg/skills/postman.svg';
+import aspnetwebapi from '/public/svg/skills/aspnetwebapi.svg';
+import aspnetcoremvc from '/public/svg/skills/aspnetcoremvc.svg';
 
 
 
@@ -241,6 +243,12 @@ export const skillsImage = (skill) => {
       return jquery;
     case 'postman':
       return postman;
+    case 'C#':
+      return csharp;
+    case 'ASP.Net Wep API':
+      return aspnetwebapi;
+    case 'Asp.Net Core MVC':
+      return aspnetcoremvc;
     default:
       break;
   }
