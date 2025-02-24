@@ -49,6 +49,12 @@ const Techno = () => {
     { name: "AWS", percentage: 85, color: "#ffeaa7" },
     { name: "jQuery", percentage: 90, color: "#dfe6e9" },
     { name: "Postman", percentage: 100, color: "#fab1a0" },
+    { name: "C#", percentage: 50, color: "#f9c74f" },
+    { name: "Dotnet", percentage: 60, color: "#f3722c" }, 
+    { name: "Ajax", percentage: 65, color: "#f3722c" },
+    { name: "JQuery", percentage: 50, color: "#f3722c" },
+    { name: "PostgreSql", percentage: 100, color: "#f3722c" },
+    { name: "SQL", percentage: 100, color: "#f3722c" },
   ];
 
   const displayedSkills = showAllSkills ? skills : skills.slice(0, 10);
