@@ -43,7 +43,18 @@ export const projectsData = [
         demo: '',
         image: ayla,
         role: 'Full Stack Developer',
-    }
+    },
+    {
+        id:5,
+        name:'Assets Managment System',
+        description:"Developed a web application for managing assets in an organization. The application allows users to add, update, and delete assets, track asset status, and generate reports. Implemented a user-friendly interface with a responsive design, enabling users to easily navigate and manage assets. Integrated a search feature for quick access to asset information and a notification system for alerts on asset status changes.",
+        tools:['C#','ASP.Net Wep API','Asp.Net Core MVC','Postgresql','Boostrap','JQuery','Ajax',],
+        code:'',
+        demo:'',
+        image:ayla,
+        role:'Full Stack Developer',
+    },
+    
 ];
 
 
