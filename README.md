@@ -141,3 +141,13 @@ export const personalData = {
 
 ---
 # Portfolio
+
+
+https://github.com/user-attachments/assets/dbd021fa-574f-4380-9e70-e113a0610acf
+
+
+
+
+Uploading Portfolio of Harsh Agrawal - Google Chrome 2025-02-24 17-07-20.mp4…
+
+
