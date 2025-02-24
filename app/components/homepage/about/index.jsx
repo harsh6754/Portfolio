@@ -18,9 +18,17 @@ function AboutSection() {
           <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase">
             Who I am?
           </p>
-          <p className="text-gray-200 text-sm lg:text-lg">
-            {personalData.description}
-          </p>
+          <ul className="text-gray-200 text-sm lg:text-xl list-disc pl-7" style={{ fontFamily: "Times New Roman, serif" }}>
+  {personalData.description.map((point, index) => (
+    <li 
+      key={index} 
+      className="transition-transform duration-300 ease-in-out hover:translate-x-2"
+    >
+      {point}
+    </li>
+  ))}
+</ul>
+
         </div>
         <div className="flex justify-center order-1 lg:order-2">
           <Image

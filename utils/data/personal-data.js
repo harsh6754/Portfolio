@@ -2,7 +2,16 @@ export const personalData = {
   name: "Harsh Agrawal",
   profile: '/profile.png',
   designation: "Full Stack Developer ",
-  description: "My name is Harsh Agrawal, a highly motivated software engineer with a strong foundation in JavaScript and a passion for building efficient, user-centered web applications. I thrive in dynamic environments, where I can apply my problem-solving skills and continually expand my technical expertise. Known for my quick learning and self-driven approach, I enjoy exploring new technologies and innovating to make the web more accessible and impactful. My experience spans full-stack web development, and I am particularly skilled in crafting robust, scalable applications that deliver a seamless user experience.I am currently seeking opportunities that leverage my strengths in JavaScript and web development to make a meaningful impact. I am eager to contribute to projects where I can grow alongside a talented team and drive results through innovation and dedication.",
+  description: [
+  "💻 Results-driven Software Engineer with expertise in JavaScript and full-stack web development.",
+  "🚀 Passionate about building scalable, high-performance applications that enhance user experience.",
+  "⚡ Thrive in dynamic environments, leveraging problem-solving skills 🧩 and technical expertise.",
+  "📚 Quick learner with a self-driven approach, constantly exploring new technologies 🔍.",
+  "🌍 Dedicated to making the web more accessible and impactful through innovation.",
+  "🎯 Proven track record of developing robust, efficient solutions for real-world challenges.",
+  "🤝 Seeking opportunities to collaborate with top-tier teams and contribute to impactful projects.",
+  "💡 Driven by a passion for cutting-edge development and pushing technological boundaries."
+],
   email: 'agrawalharsh1028@gmail.com',
   phone: '+91-9636504390',
   address: '107 Shrimal Nagar, Bhinmal, Jalore - 343029, Rajasthan, India ',
