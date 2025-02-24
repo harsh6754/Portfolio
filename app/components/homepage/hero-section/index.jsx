@@ -134,6 +134,14 @@ function HeroSection() {
                 <span className="text-amber-300">AWS</span>
                 <span className="text-gray-400">{"', '"}</span>
                 <span className="text-amber-300">Redis</span>
+                <span className="text-gray-400">{"', '"}</span>
+                <span className="text-amber-300">C#</span>
+                <span className="text-gray-400">{"', '"}</span>
+                <span className="text-amber-300">Dotnet</span>
+                <span className="text-gray-400">{"', '"}</span>
+                <span className="text-amber-300">JQuery</span>
+                <span className="text-gray-400">{"', '"}</span>
+                <span className="text-amber-300">AJAX</span>
                 <span className="text-gray-400">{"'],"}</span>
               </div>
               <div>
