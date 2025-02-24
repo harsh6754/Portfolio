@@ -23,4 +23,17 @@ export const personalData = {
   leetcode: "https://leetcode.com/harsh1028/",
   devUsername: "",
   resume: "https://drive.google.com/file/d/1bJwdw84_EllX2hl_phLSZ56CWMXyWAyS/view?usp=sharing",
-}
+
+  carouselImages: [
+    "/slide1.jpg",
+    "/slide2.jpg",
+    "/slide3.jpg",
+    "/slide4.jpg",
+    "/slide5.jpg",
+    "/slide6.jpg",
+    "/slide7.jpg",
+    "/slide8.jpg",
+    "/slide9.jpg",
+    "/slide10.jpg"
+  ],
+};
