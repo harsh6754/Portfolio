@@ -68,7 +68,6 @@ function Experience() {
           </p>
         </motion.div>
       </div>
-      
 
       {/* Experience content */}
       <div className="container mx-auto px-4">
@@ -161,9 +160,9 @@ function Experience() {
 
       {/* Experience details modal */}
       {selectedExp && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto" onClick={closeModal}>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={closeModal}>
           <motion.div 
-            className="bg-gradient-to-br from-[#0c0921] to-[#1a1443] max-w-3xl w-full rounded-xl border border-[#464c6a]/30 shadow-2xl overflow-hidden my-8"
+            className="bg-gradient-to-br from-[#0c0921] to-[#1a1443] max-w-3xl w-full rounded-xl border border-[#464c6a]/30 shadow-2xl overflow-hidden"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
@@ -171,101 +170,86 @@ function Experience() {
             onClick={(e) => e.stopPropagation()}
             ref={modalRef}
           >
-            {/* Header with gradient background */}
-            <div className="bg-gradient-to-r from-violet-600/20 to-[#16f2b3]/20 p-6 md:p-8 border-b border-[#464c6a]/30 relative">
+            <div className="relative">
               <button 
                 className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white"
                 onClick={closeModal}
-                aria-label="Close details"
               >
                 <BsX size={20} />
               </button>
               
-              <div className="inline-block px-3 py-1 mb-3 text-xs font-medium text-[#16f2b3] bg-[#16f2b3]/10 rounded-full">
-                {selectedExp.duration}
-              </div>
-              
-              <h3 className="text-2xl font-bold text-white mb-2">{selectedExp.title}</h3>
-              <div className="flex items-center gap-2">
-                <HiOutlineLocationMarker className="text-violet-400" />
-                <p className="text-gray-300">{selectedExp.company}</p>
-              </div>
-            </div>
-            
-            {/* Content section */}
-            <div className="p-6 md:p-8">
-              {selectedExp.description && (
-                <div className="mb-8">
-                  <h4 className="text-white font-medium mb-3 flex items-center gap-2 pb-2 border-b border-[#464c6a]/30">
-                    <span className="bg-gradient-to-r from-[#16f2b3] to-[#5291ef] text-transparent bg-clip-text">Overview</span>
-                  </h4>
-                  <p className="text-gray-300 leading-relaxed">{selectedExp.description}</p>
+              <div className="p-6 md:p-8">
+                <div className="inline-block px-3 py-1 mb-3 text-xs font-medium text-[#16f2b3] bg-[#16f2b3]/10 rounded-full">
+                  {selectedExp.duration}
                 </div>
-              )}
-              
-              {selectedExp.responsibilities && (
-                <div className="mb-8">
-                  <h4 className="text-white font-medium mb-4 flex items-center gap-2 pb-2 border-b border-[#464c6a]/30">
-                    <span className="bg-gradient-to-r from-[#16f2b3] to-[#5291ef] text-transparent bg-clip-text">Key Responsibilities</span>
-                  </h4>
-                  <ul className="space-y-3">
-                    {selectedExp.responsibilities.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-gray-300 group">
-                        <div className="min-w-[24px] h-6 mt-0.5 flex items-center justify-center">
-                          <div className="w-2 h-2 bg-gradient-to-r from-[#16f2b3] to-[#5291ef] rounded-full group-hover:scale-125 transition-transform"></div>
-                        </div>
-                        <p className="leading-relaxed">{item}</p>
-                      </li>
-                    ))}
-                  </ul>
+                
+                <h3 className="text-2xl font-bold text-white mb-2">{selectedExp.title}</h3>
+                <div className="flex items-center gap-2 mb-6">
+                  <HiOutlineLocationMarker className="text-violet-400" />
+                  <p className="text-gray-300">{selectedExp.company}</p>
                 </div>
-              )}
-              
-              {selectedExp.technologies && (
-                <div className="mb-8">
-                  <h4 className="text-white font-medium mb-4 flex items-center gap-2 pb-2 border-b border-[#464c6a]/30">
-                    <FaCode className="text-[#16f2b3]" />
-                    <span>Technologies Used</span>
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedExp.technologies.map((tech, idx) => (
-                      <span 
-                        key={idx} 
-                        className="text-sm px-3 py-1.5 bg-gradient-to-r from-violet-900/40 to-indigo-900/40 text-violet-300 rounded-full border border-violet-800/30 hover:-translate-y-1 transition-transform duration-300"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                
+                {selectedExp.description && (
+                  <div className="mb-6">
+                    <h4 className="text-white font-medium mb-2 flex items-center gap-2">
+                      <span className="text-[#16f2b3]">Overview</span>
+                    </h4>
+                    <p className="text-gray-300">{selectedExp.description}</p>
                   </div>
-                </div>
-              )}
-              
-              {selectedExp.imageUrl && (
-                <div className="mt-8">
-                  <h4 className="text-white font-medium mb-4 flex items-center gap-2 pb-2 border-b border-[#464c6a]/30">
-                    <span>Project Screenshot</span>
-                  </h4>
-                  <div 
-                    className="cursor-pointer rounded-lg overflow-hidden border border-[#464c6a]/30 relative group"
-                    onClick={() => handleImageClick(selectedExp.imageUrl)}
-                  >
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                      <div className="bg-white/20 p-3 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
-                        </svg>
-                      </div>
+                )}
+                
+                {selectedExp.responsibilities && (
+                  <div className="mb-6">
+                    <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                      <span className="text-[#16f2b3]">Key Responsibilities</span>
+                    </h4>
+                    <ul className="space-y-2">
+                      {selectedExp.responsibilities.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-gray-300">
+                          <div className="min-w-[20px] mt-1">
+                            <div className="w-2 h-2 bg-[#16f2b3] rounded-full"></div>
+                          </div>
+                          <p>{item}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {selectedExp.technologies && (
+                  <div className="mb-6">
+                    <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                      <FaCode className="text-[#16f2b3]" />
+                      <span>Technologies Used</span>
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedExp.technologies.map((tech, idx) => (
+                        <span key={idx} className="text-sm px-3 py-1 bg-violet-900/30 text-violet-300 rounded-full">
+                          {tech}
+                        </span>
+                      ))}
                     </div>
-                    {/* <Image 
-                      src={selectedExp.imageUrl} 
-                      alt={`${selectedExp.company} project`}
-                      width={800}
-                      height={450}
-                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
-                    /> */}
                   </div>
-                </div>
-              )}
+                )}
+                
+                {selectedExp.imageUrl && (
+                  <div className="mt-6">
+                    <h4 className="text-white font-medium mb-3">Project Screenshot</h4>
+                    <div 
+                      className="cursor-pointer rounded-lg overflow-hidden border border-[#464c6a]/30"
+                      onClick={() => handleImageClick(selectedExp.imageUrl)}
+                    >
+                      <Image 
+                        src={selectedExp.imageUrl} 
+                        alt={`${selectedExp.company} project`}
+                        width={800}
+                        height={450}
+                        className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         </div>
@@ -290,13 +274,13 @@ function Experience() {
             >
               <BsX size={24} />
             </button>
-            {/* <Image 
+            <Image 
               src={selectedImage} 
               alt="Project screenshot" 
               width={1200}
               height={800}
               className="w-full h-auto object-contain rounded-lg"
-            /> */}
+            />
           </motion.div>
         </div>
       )}
@@ -304,4 +288,4 @@ function Experience() {
   );
 }
 
-export default Experience; 
+export default Experience;
