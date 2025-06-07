@@ -1,106 +1,290 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { experiences } from "@/utils/data/experience";
 import Image from "next/image";
-import { BsPersonWorkspace } from "react-icons/bs";
+import { motion } from "framer-motion";
+import { BsBriefcase, BsArrowRight, BsX } from "react-icons/bs";
+import { FaCode } from "react-icons/fa";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 import AnimationLottie from "../../helper/animation-lottie";
-import GlowCard from "../../helper/glow-card";
 import experience from '/public/lottie/coding.json';
 
 function Experience() {
+  const [selectedExp, setSelectedExp] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const modalRef = useRef(null);
+
+  const handleExpClick = (exp) => {
+    setSelectedExp(exp);
+  };
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const closeModal = () => {
+    setSelectedExp(null);
+  };
+
+  const closeImageView = () => {
+    setSelectedImage(null);
+  };
 
   return (
-    <div id="experience" className="relative z-50 border-t my-12 lg:my-24 border-[#25213b]">
-      <Image
-        src="/section.svg"
-        alt="Hero"
-        width={1572}
-        height={795}
-        className="absolute top-0 -z-10"
-      />
-
-      <div className="flex justify-center my-5 lg:py-8">
-        <div className="flex items-center">
-          <span className="w-24 h-[2px] bg-[#1a1443]"></span>
-          <span className="bg-[#1a1443] w-fit text-white p-2 px-5 text-xl rounded-md">
-            Experiences
-          </span>
-          <span className="w-24 h-[2px] bg-[#1a1443]"></span>
-        </div>
+    <section id="experience" className="py-20 relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-40 right-0 w-72 h-72 bg-violet-500/10 rounded-full filter blur-3xl"></div>
+        <div className="absolute bottom-20 left-0 w-72 h-72 bg-[#16f2b3]/10 rounded-full filter blur-3xl"></div>
+        <Image
+          src="/section.svg"
+          alt="Background pattern"
+          width={1572}
+          height={795}
+          className="absolute top-0 opacity-30"
+        />
       </div>
 
-      <div className="py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-          <div className="flex justify-center items-start">
-            <div className="w-full h-full">
+      {/* Section header */}
+      <div className="container mx-auto px-4 mb-16">
+        <motion.div 
+          className="text-center max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-violet-500"></div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white flex items-center">
+              <BsBriefcase className="mr-3 text-[#16f2b3]" />
+              <span>Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#16f2b3] to-[#5291ef]">Experience</span></span>
+            </h2>
+            <div className="h-[1px] w-12 bg-gradient-to-r from-violet-500 to-transparent"></div>
+          </div>
+          <p className="text-gray-300 mt-4 text-lg">
+            My journey as a software engineer and the companies I've worked with
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Experience content */}
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+          {/* Animation column */}
+          <motion.div 
+            className="lg:col-span-2 flex justify-center items-center"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="w-full max-w-md">
               <AnimationLottie animationPath={experience} />
             </div>
-          </div>
+          </motion.div>
 
-          <div>
-            <div className="flex flex-col gap-6">
-              {experiences.map((exp) => (
-                <GlowCard 
-                  key={exp.id} 
-                  identifier={`experience-${exp.id}`} 
-                  onClick={() => exp.imageUrl && setSelectedImage(exp.imageUrl)} // ✅ Click to show image
-                  className="cursor-pointer hover:scale-105 transition-transform duration-300"
+          {/* Experience timeline */}
+          <motion.div 
+            className="lg:col-span-3"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="relative pl-8 border-l border-violet-900/50">
+              {experiences.map((exp, index) => (
+                <motion.div 
+                  key={exp.id}
+                  className="mb-12 relative"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className="p-3 relative">
-                    <Image
-                      src="/blur-23.svg"
-                      alt="Hero"
-                      width={1080}
-                      height={200}
-                      className="absolute bottom-0 opacity-80"
-                    />
-                    <div className="flex justify-center">
-                      <p className="text-xs sm:text-sm text-[#16f2b3]">
-                        {exp.duration}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-x-8 px-3 py-5">
-                      <div className="text-violet-500 transition-all duration-300 hover:scale-125">
-                        <BsPersonWorkspace size={36} />
-                      </div>
-                      <div>
-                        <p className="text-base sm:text-xl mb-2 font-medium uppercase">
-                          {exp.title}
-                        </p>
-                        <p className="text-sm sm:text-base">
-                          {exp.company}
-                        </p>
-                      </div>
-                    </div>
+                  {/* Timeline dot */}
+                  <div className="absolute -left-[41px] top-0 w-8 h-8 rounded-full bg-gradient-to-r from-[#16f2b3] to-[#5291ef] flex items-center justify-center shadow-lg shadow-violet-500/20">
+                    <BsBriefcase className="text-black text-lg" />
                   </div>
-                </GlowCard>
+                  
+                  {/* Experience card */}
+                  <motion.div 
+                    className="bg-gradient-to-br from-[#0c0921]/80 to-[#1a1443]/80 backdrop-blur-sm p-6 rounded-xl border border-[#464c6a]/30 shadow-xl hover:shadow-violet-500/10 transition-all duration-300 cursor-pointer"
+                    whileHover={{ y: -5 }}
+                    onClick={() => handleExpClick(exp)}
+                  >
+                    {/* Duration badge */}
+                    <div className="inline-block px-3 py-1 mb-4 text-xs font-medium text-[#16f2b3] bg-[#16f2b3]/10 rounded-full">
+                      {exp.duration}
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-white mb-2">{exp.title}</h3>
+                    
+                    <div className="flex items-center gap-2 mb-4">
+                      <HiOutlineLocationMarker className="text-violet-400" />
+                      <p className="text-gray-300">{exp.company}</p>
+                    </div>
+                    
+                    {exp.description && (
+                      <p className="text-gray-400 text-sm mb-4 line-clamp-2">{exp.description}</p>
+                    )}
+                    
+                    <div className="flex justify-between items-center">
+                      {exp.technologies && (
+                        <div className="flex flex-wrap gap-2">
+                          {exp.technologies.slice(0, 3).map((tech, idx) => (
+                            <span key={idx} className="text-xs px-2 py-1 bg-violet-900/30 text-violet-300 rounded-md">
+                              {tech}
+                            </span>
+                          ))}
+                          {exp.technologies.length > 3 && (
+                            <span className="text-xs px-2 py-1 bg-violet-900/30 text-violet-300 rounded-md">
+                              +{exp.technologies.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      
+                      <button className="text-[#16f2b3] hover:text-white transition-colors flex items-center gap-1 text-sm">
+                        Details <BsArrowRight />
+                      </button>
+                    </div>
+                  </motion.div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Show selected image */}
-      {selectedImage && (
-        <div className="flex flex-col items-center mt-6">
-          <Image 
-            src={selectedImage} 
-            alt="Experience Image" 
-            width={800} 
-            height={600} 
-            className="rounded-lg shadow-lg"
-          />
-          <button 
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-            onClick={() => setSelectedImage(null)}
+      {/* Experience details modal */}
+      {selectedExp && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={closeModal}>
+          <motion.div 
+            className="bg-gradient-to-br from-[#0c0921] to-[#1a1443] max-w-3xl w-full rounded-xl border border-[#464c6a]/30 shadow-2xl overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
+            ref={modalRef}
           >
-            Hide Image
-          </button>
+            <div className="relative">
+              <button 
+                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white"
+                onClick={closeModal}
+              >
+                <BsX size={20} />
+              </button>
+              
+              <div className="p-6 md:p-8">
+                <div className="inline-block px-3 py-1 mb-3 text-xs font-medium text-[#16f2b3] bg-[#16f2b3]/10 rounded-full">
+                  {selectedExp.duration}
+                </div>
+                
+                <h3 className="text-2xl font-bold text-white mb-2">{selectedExp.title}</h3>
+                <div className="flex items-center gap-2 mb-6">
+                  <HiOutlineLocationMarker className="text-violet-400" />
+                  <p className="text-gray-300">{selectedExp.company}</p>
+                </div>
+                
+                {selectedExp.description && (
+                  <div className="mb-6">
+                    <h4 className="text-white font-medium mb-2 flex items-center gap-2">
+                      <span className="text-[#16f2b3]">Overview</span>
+                    </h4>
+                    <p className="text-gray-300">{selectedExp.description}</p>
+                  </div>
+                )}
+                
+                {selectedExp.responsibilities && (
+                  <div className="mb-6">
+                    <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                      <span className="text-[#16f2b3]">Key Responsibilities</span>
+                    </h4>
+                    <ul className="space-y-2">
+                      {selectedExp.responsibilities.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-gray-300">
+                          <div className="min-w-[20px] mt-1">
+                            <div className="w-2 h-2 bg-[#16f2b3] rounded-full"></div>
+                          </div>
+                          <p>{item}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {selectedExp.technologies && (
+                  <div className="mb-6">
+                    <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                      <FaCode className="text-[#16f2b3]" />
+                      <span>Technologies Used</span>
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedExp.technologies.map((tech, idx) => (
+                        <span key={idx} className="text-sm px-3 py-1 bg-violet-900/30 text-violet-300 rounded-full">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {selectedExp.imageUrl && (
+                  <div className="mt-6">
+                    <h4 className="text-white font-medium mb-3">Project Screenshot</h4>
+                    <div 
+                      className="cursor-pointer rounded-lg overflow-hidden border border-[#464c6a]/30"
+                      onClick={() => handleImageClick(selectedExp.imageUrl)}
+                    >
+                      <Image 
+                        src={selectedExp.imageUrl} 
+                        alt={`${selectedExp.company} project`}
+                        width={800}
+                        height={450}
+                        className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
         </div>
       )}
-    </div>
+
+      {/* Full-size image viewer */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={closeImageView}
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative max-w-5xl w-full"
+          >
+            <button 
+              className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white z-10"
+              onClick={closeImageView}
+            >
+              <BsX size={24} />
+            </button>
+            <Image 
+              src={selectedImage} 
+              alt="Project screenshot" 
+              width={1200}
+              height={800}
+              className="w-full h-auto object-contain rounded-lg"
+            />
+          </motion.div>
+        </div>
+      )}
+    </section>
   );
 }
 
