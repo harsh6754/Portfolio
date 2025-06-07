@@ -255,13 +255,13 @@ function Experience() {
                         </svg>
                       </div>
                     </div>
-                    <Image 
+                    {/* <Image 
                       src={selectedExp.imageUrl} 
                       alt={`${selectedExp.company} project`}
                       width={800}
                       height={450}
                       className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    /> */}
                   </div>
                 </div>
               )}
@@ -289,13 +289,13 @@ function Experience() {
             >
               <BsX size={24} />
             </button>
-            <Image 
+            {/* <Image 
               src={selectedImage} 
               alt="Project screenshot" 
               width={1200}
               height={800}
               className="w-full h-auto object-contain rounded-lg"
-            />
+            /> */}
           </motion.div>
         </div>
       )}
