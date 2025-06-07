@@ -5,8 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const images = [
-  "/slider1.jpg",
-  "/slider2.jpg",
   "/slider6.jpg",
   "/slider8.jpg",
   "/slider9.jpg",
@@ -176,7 +174,7 @@ function AboutSection() {
             viewport={{ once: true }}
           >
             <a 
-              href="/resume.pdf" 
+              href="/resume" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#16f2b3] to-[#5291ef] text-black font-medium rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"

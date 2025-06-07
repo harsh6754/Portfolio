@@ -45,6 +45,7 @@ export default async function Home() {
       <Education />
       <Blog blogs={blogs} />
       <ContactSection />
+       
     </>
   )
 };
