@@ -1,230 +1,232 @@
 "use client";
-// @flow strict
-import { isValidEmail } from '@/utils/check-email';
+import { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
-import { useState } from 'react';
-import { BsArrowRightShort } from "react-icons/bs";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRef } from 'react';
-import styled from 'styled-components';
-
-// Email validation function
-function validateEmail(email) {
-  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-  if (!regex.test(email)) {
-    return false;
-  }
-
-  const domain = email.split('@')[1];
-  const topLevelDomain = domain.split('.').pop();
-
-  const validTlds = [
-    'com', 'net', 'org', 'edu', 'gov', 'mil', 'int', 'co',
-    'uk', 'ca', 'de', 'au', 'in', 'fr', 'jp', 'cn', 'br', 'ru'
-  ];
-
-  if (!validTlds.includes(topLevelDomain)) {
-    return false;
-  }
-
-  return true;
-}
+import { BsSend } from "react-icons/bs";
+import { FiUser, FiMail, FiMessageSquare } from "react-icons/fi";
 
 function ContactForm() {
-  const form = useRef();
-
-  const sendEmail = (e) => {
-    e.preventDefault();
-
-    emailjs
-      .sendForm(
-        'service_4h4sako',
-        'template_o6sym37',
-        form.current,
-        '1up9aB2deQPU1J8wG',
-      ).then(
-        () => {
-          console.log('SUCCESS!');
-          toast.success('Email sent Successfully!');
-        },
-        (error) => {
-          console.log('FAILED...', error.text);
-          toast.error('Failed to send email!');
-        },
-      );
-  };
-
-  const [input, setInput] = useState({
-    name: '',
-    email: '',
-    message: '',
+  const [formData, setFormData] = useState({
+    user_name: '',
+    user_email: '',
+    message: ''
   });
+  
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef(null);
 
-  const [error, setError] = useState({
-    email: false,
-    required: false,
-  });
-
-  const checkRequired = () => {
-    if (input.email && input.message && input.name) {
-      setError({ ...error, required: false });
-    }
+  // Validate email format
+  const validateEmail = (email) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
   };
 
-  const handleSendMail = async (e) => {
-    e.preventDefault();
-  
-    // Check if any field is empty
-    if (!input.name || !input.email || !input.message) {
-      setError({ ...error, required: true });
-      toast.error('All fields are required!'); // Show toast message
-      return;
+  // Form validation
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.user_name.trim()) {
+      newErrors.user_name = 'Name is required';
     }
-  
-    // Validate email format
-    if (error.email) {
-      toast.error('Please provide a valid email address!');
-      return;
+    
+    if (!formData.user_email.trim()) {
+      newErrors.user_email = 'Email is required';
+    } else if (!validateEmail(formData.user_email)) {
+      newErrors.user_email = 'Please enter a valid email';
     }
-  
-    // All validations passed
-    setError({ ...error, required: false });
-  
-    const serviceID = "service_4h4sako";
-    const templateID = "template_o6sym37";
-    const userID = "1up9aB2deQPU1J8wG";
-  
-    try {
-      const res = await emailjs.send(serviceID, templateID, input, userID);
-  
-      if (res.status === 200) {
-        toast.success('Message sent successfully!');
-        setInput({
-          name: '',
-          email: '',
-          message: '',
-        });
-      }
-    } catch (error) {
-      toast.error(error?.text || 'Failed to send message!');
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = 'Message must be at least 10 characters';
     }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setInput({
-      ...input,
-      [name]: value,
+    setFormData({
+      ...formData,
+      [name]: value
     });
+    
+    // Clear error when user types
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: null
+      });
+    }
+  };
 
-    if (name === 'email') {
-      if (!validateEmail(value)) {
-        setError({ ...error, email: true });
-        toast.error('Invalid email address!');
-      } else {
-        setError({ ...error, email: false });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      toast.error('Please fix the errors in the form');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const result = await emailjs.sendForm(
+        'service_4h4sako',
+        'template_o6sym37',
+        formRef.current,
+        '1up9aB2deQPU1J8wG'
+      );
+      
+      if (result.status === 200) {
+        setFormData({ user_name: '', user_email: '', message: '' });
+        toast.success('Message sent successfully!');
       }
+    } catch (error) {
+      toast.error(error?.text || 'Failed to send message');
+      console.error('Email error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="w-full h-auto flex flex-col">
-      <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase">
-        Contact with me
-      </p>
-      <div className="max-w-3xl text-white rounded-lg border border-[#464c6a] p-3 lg:p-5">
-        <p className="text-sm text-[#d3d8e8]">
-          {"If you have any questions or concerns, please don't hesitate to contact me. I am open to any work opportunities that align with my skills and interests."}
-        </p>
-        <Container>
-          <StyledContactForm>
-            <form ref={form} onSubmit={sendEmail}>
-              <label>Name</label>
-              <input type="text" name="user_name" onChange={handleChange} required/>
-              <label>Email</label>
-              <input type="email" name="user_email" onChange={handleChange} required/>
-              <label>Message</label>
-              <textarea name="message" onChange={handleChange} required/>
-              <input type="submit" value="Send" />
-            </form>
-          </StyledContactForm>
-        </Container>
-      </div>
+    <motion.div 
+      className="w-full bg-gradient-to-br from-[#0c0921]/60 to-[#1a1443]/60 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-[#464c6a]/30 shadow-lg"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h3 className="text-2xl font-bold mb-6 text-white">
+        Send me a <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#16f2b3] to-[#5291ef]">Message</span>
+      </h3>
+      
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label htmlFor="user_name" className="block text-sm font-medium text-gray-200 mb-2 flex items-center">
+            <FiUser className="mr-2 text-[#16f2b3]" />
+            Name
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              id="user_name"
+              name="user_name"
+              value={formData.user_name}
+              onChange={handleChange}
+              className={`w-full bg-[#0c0921]/70 border ${errors.user_name ? 'border-red-500' : 'border-[#464c6a]'} rounded-lg py-3 px-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16f2b3]/50 focus:border-transparent transition-all duration-300`}
+              placeholder="Your name"
+            />
+            {errors.user_name && (
+              <motion.p 
+                className="text-red-500 text-xs mt-1"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {errors.user_name}
+              </motion.p>
+            )}
+          </div>
+        </div>
+        
+        <div>
+          <label htmlFor="user_email" className="block text-sm font-medium text-gray-200 mb-2 flex items-center">
+            <FiMail className="mr-2 text-[#16f2b3]" />
+            Email
+          </label>
+          <div className="relative">
+            <input
+              type="email"
+              id="user_email"
+              name="user_email"
+              value={formData.user_email}
+              onChange={handleChange}
+              className={`w-full bg-[#0c0921]/70 border ${errors.user_email ? 'border-red-500' : 'border-[#464c6a]'} rounded-lg py-3 px-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16f2b3]/50 focus:border-transparent transition-all duration-300`}
+              placeholder="your.email@example.com"
+            />
+            {errors.user_email && (
+              <motion.p 
+                className="text-red-500 text-xs mt-1"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {errors.user_email}
+              </motion.p>
+            )}
+          </div>
+        </div>
+        
+        <div>
+          <label htmlFor="message" className="block text-sm font-medium text-gray-200 mb-2 flex items-center">
+            <FiMessageSquare className="mr-2 text-[#16f2b3]" />
+            Message
+          </label>
+          <div className="relative">
+            <textarea
+              id="message"
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              rows="5"
+              className={`w-full bg-[#0c0921]/70 border ${errors.message ? 'border-red-500' : 'border-[#464c6a]'} rounded-lg py-3 px-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16f2b3]/50 focus:border-transparent transition-all duration-300 resize-none`}
+              placeholder="Tell me about your project, questions, or opportunities..."
+            />
+            {errors.message && (
+              <motion.p 
+                className="text-red-500 text-xs mt-1"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {errors.message}
+              </motion.p>
+            )}
+          </div>
+        </div>
+        
+        <motion.button
+          type="submit"
+          disabled={isSubmitting}
+          className={`w-full py-3 px-6 rounded-lg flex items-center justify-center font-medium ${
+            isSubmitting 
+              ? 'bg-gray-600 cursor-not-allowed' 
+              : 'bg-gradient-to-r from-[#16f2b3] to-[#5291ef] hover:shadow-lg hover:shadow-[#16f2b3]/20 text-black'
+          } transition-all duration-300`}
+          whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+          whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+        >
+          {isSubmitting ? (
+            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          ) : (
+            <BsSend className="mr-2" />
+          )}
+          {isSubmitting ? 'Sending...' : 'Send Message'}
+        </motion.button>
+      </form>
+
       <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar={true}
-        newestOnTop={false}
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        theme="dark"
       />
-    </div>
+    </motion.div>
   );
-};
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 85.3vh;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
-
-const StyledContactForm = styled.div`
-  width: 100%;
-  height: 93%;
-  background-color: white;
-  padding: 20px;
-  border-radius:25px;
-
-  form {
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    width: 100%;
-    font-size: 16px;
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 7px;
-      margin-bottom: 10px;
-      outline: none;
-      border-radius: 5px;
-      border: 1px solid rgb(220, 220, 220);
-      color: black;
-
-      &:focus {
-        border: 2px solid rgba(0, 206, 158, 1);
-      }
-    }
-
-    textarea {
-      min-height: 100px;
-      max-height: 100px;
-    }
-
-    label {
-      margin-top: 1rem;
-      color: black;
-    }
-
-    input[type='submit'] {
-      margin-top: 2rem;
-      cursor: pointer;
-      background: rgb(249, 105, 14);
-      color: black;
-      border: none;
-    }
-  }
-`;
+}
 
 export default ContactForm;
