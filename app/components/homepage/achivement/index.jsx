@@ -74,7 +74,7 @@ function Achivement() {
                       <TbCertificate size={30} className='text-violet-500 ' />
                       <p className='cursor-pointer'>Certificate</p>
                     </div>
-                  </a>
+                  </a> 
 
                   <a href="" target="_blank" rel="noopener noreferrer">
                     <div className='flex items-center gap-2 md:p-6 transition-all duration-300 hover:scale-125 '>

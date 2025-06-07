@@ -64,7 +64,7 @@ function Experience() {
             <div className="h-[1px] w-12 bg-gradient-to-r from-violet-500 to-transparent"></div>
           </div>
           <p className="text-gray-300 mt-4 text-lg">
-            My journey as a software engineer and the companies I've worked with
+            My journey as a software engineer and the companies I&apos;ve worked with
           </p>
         </motion.div>
       </div>

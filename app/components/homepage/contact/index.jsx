@@ -33,7 +33,7 @@ function ContactSection() {
           </h2>
           <div className="h-1 w-20 bg-gradient-to-r from-[#16f2b3] to-[#5291ef] mx-auto mb-6 rounded-full"></div>
           <p className="text-gray-300 text-lg">
-            Have a question or want to work together? Let's connect!
+            Have a question or want to work together? Let&apos;s connect!
           </p>
         </motion.div>
       </div>
