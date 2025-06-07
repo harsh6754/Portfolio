@@ -4,7 +4,7 @@ import { personalData } from "@/utils/data/personal-data";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { BsGithub, BsLinkedin } from "react-icons/bs";
+import { BsGithub, BsLinkedin, BsWhatsapp } from "react-icons/bs"; // Add BsWhatsapp import
 import { FaFacebook, FaTwitterSquare } from "react-icons/fa";
 import { MdDownload } from "react-icons/md";
 import { RiContactsFill } from "react-icons/ri";
@@ -63,7 +63,7 @@ function HeroSection() {
         className="absolute -top-[98px] -z-10"
       />
 
-      {/* Job Availability Banner with LinkedIn Link */}
+      {/* Job Availability Banner with LinkedIn and WhatsApp Links */}
       <AnimatePresence>
         {showJobBanner && (
           <motion.div
@@ -83,7 +83,7 @@ function HeroSection() {
                 </p>
               </div>
               
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <Link 
                   href="https://www.linkedin.com/in/harsh2810" 
                   target="_blank"
@@ -91,6 +91,16 @@ function HeroSection() {
                 >
                   <BsLinkedin size={14} />
                   <span>Connect on LinkedIn</span>
+                </Link>
+                
+                {/* WhatsApp Link */}
+                <Link 
+                  href="https://wa.me/919636504390" 
+                  target="_blank"
+                  className="flex items-center gap-1.5 bg-green-500/30 hover:bg-green-500/40 text-white px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200"
+                >
+                  <BsWhatsapp size={14} />
+                  <span>Chat on WhatsApp</span>
                 </Link>
                 
                 <button 
