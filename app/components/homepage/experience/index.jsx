@@ -68,6 +68,7 @@ function Experience() {
           </p>
         </motion.div>
       </div>
+      
 
       {/* Experience content */}
       <div className="container mx-auto px-4">
