@@ -295,7 +295,7 @@ function HeroSection() {
                 <div className="mt-6 pt-6 border-t border-[#1f223c] flex justify-between">
                   <div className="text-gray-300 text-sm">
                     <p>Need a different time?</p>
-                    <p>Let's coordinate to find a suitable slot.</p>
+                    <p>Let&apos;s coordinate to find a suitable slot.</p>
                   </div>
                   
                   <Link
@@ -319,7 +319,7 @@ function HeroSection() {
             Hello, <br />
             This is {' '}
             <span className=" text-pink-500">{personalData.name}</span>
-            {` , I'm a Professional `}
+            {` , I&apos;m a Professional `}
             <span className=" text-[#16f2b3]">{personalData.designation}</span>
             .
           </h1>
