@@ -209,7 +209,7 @@ function HeroSection() {
         )}
       </AnimatePresence>
       
-      {/* New Interview Schedule Calendar Popup */}
+      {/* New Interview Schedule Calendar Popup - Fixed Height */}
       <AnimatePresence>
         {showSchedulePopup && (
           <motion.div 
@@ -222,10 +222,10 @@ function HeroSection() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="relative w-full max-w-xl bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-xl bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
             >
-              <div className="flex items-center justify-between bg-gradient-to-r from-violet-600/90 to-pink-500/90 px-6 py-4">
-                <h3 className="text-white font-bold text-lg">Interview Availability Schedule</h3>
+              <div className="flex items-center justify-between bg-gradient-to-r from-violet-600/90 to-pink-500/90 px-6 py-3">
+                <h3 className="text-white font-bold text-lg">Interview Availability</h3>
                 <button
                   onClick={toggleSchedulePopup}
                   className="text-white/80 hover:text-white p-1 rounded-full bg-black/20 hover:bg-black/30 transition-all"
@@ -235,24 +235,25 @@ function HeroSection() {
                 </button>
               </div>
               
-              <div className="p-6">
-                <div className="grid grid-cols-7 mb-4 text-center text-xs font-medium text-gray-400">
-                  <div>Sun</div>
-                  <div>Mon</div>
-                  <div>Tue</div>
-                  <div>Wed</div>
-                  <div>Thu</div>
-                  <div>Fri</div>
-                  <div>Sat</div>
+              <div className="p-5 overflow-y-auto">
+                {/* Compact calendar display */}
+                <div className="grid grid-cols-7 mb-3 text-center text-xs font-medium text-gray-400">
+                  <div>Su</div>
+                  <div>Mo</div>
+                  <div>Tu</div>
+                  <div>We</div>
+                  <div>Th</div>
+                  <div>Fr</div>
+                  <div>Sa</div>
                 </div>
                 
-                {/* Sample calendar grid - you can make this dynamic if needed */}
-                <div className="grid grid-cols-7 gap-1 mb-6">
+                {/* Smaller calendar grid */}
+                <div className="grid grid-cols-7 gap-1 mb-4">
                   {Array.from({ length: 31 }).map((_, i) => (
                     <div 
                       key={i} 
                       className={`
-                        aspect-square flex items-center justify-center text-sm rounded-md
+                        aspect-square flex items-center justify-center text-xs rounded-md
                         ${i % 7 === 0 || i % 7 === 6 
                           ? "bg-green-500/20 border border-green-500/30 text-green-400" 
                           : "bg-indigo-500/20 border border-indigo-500/30 text-indigo-400"}
@@ -263,37 +264,38 @@ function HeroSection() {
                   ))}
                 </div>
                 
-                <div className="space-y-5">
+                <div className="space-y-4">
+                  {/* Weekday availability - more compact */}
                   <div>
-                    <h4 className="text-white font-semibold flex items-center mb-2">
-                      <span className="h-3 w-3 bg-indigo-500 rounded-full mr-2"></span>
+                    <h4 className="text-white font-semibold flex items-center mb-2 text-sm">
+                      <span className="h-2.5 w-2.5 bg-indigo-500 rounded-full mr-2"></span>
                       Weekday Availability (Monday-Friday)
                     </h4>
-                    <div className="bg-[#161b38] rounded-lg p-4 border border-[#1f223c]">
-                      <p className="text-gray-300 text-sm leading-relaxed">
-                        Available for interviews <span className="text-indigo-400 font-medium">after 8:00 PM</span> on weekdays.
-                        Preferred time slots between <span className="text-indigo-400 font-medium">8:00 PM - 11:00 PM</span>.
+                    <div className="bg-[#161b38] rounded-lg p-3 border border-[#1f223c]">
+                      <p className="text-gray-300 text-xs leading-relaxed">
+                        Available <span className="text-indigo-400 font-medium">after 8:00 PM</span> on weekdays.
+                        Preferred slots: <span className="text-indigo-400 font-medium">8:00 PM - 11:00 PM</span>.
                       </p>
                     </div>
                   </div>
                   
+                  {/* Weekend availability - more compact */}
                   <div>
-                    <h4 className="text-white font-semibold flex items-center mb-2">
-                      <span className="h-3 w-3 bg-green-500 rounded-full mr-2"></span>
+                    <h4 className="text-white font-semibold flex items-center mb-2 text-sm">
+                      <span className="h-2.5 w-2.5 bg-green-500 rounded-full mr-2"></span>
                       Weekend Availability (Saturday-Sunday)
                     </h4>
-                    <div className="bg-[#161b38] rounded-lg p-4 border border-[#1f223c]">
-                      <p className="text-gray-300 text-sm leading-relaxed">
+                    <div className="bg-[#161b38] rounded-lg p-3 border border-[#1f223c]">
+                      <p className="text-gray-300 text-xs leading-relaxed">
                         Available <span className="text-green-400 font-medium">anytime</span> between 
                         <span className="text-green-400 font-medium"> 9:00 AM - 8:00 PM</span> on weekends.
-                        Flexible for extended discussions if needed.
                       </p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-6 pt-6 border-t border-[#1f223c] flex justify-between">
-                  <div className="text-gray-300 text-sm">
+                <div className="mt-4 pt-4 border-t border-[#1f223c] flex justify-between">
+                  <div className="text-gray-300 text-xs">
                     <p>Need a different time?</p>
                     <p>Let&apos;s coordinate to find a suitable slot.</p>
                   </div>
@@ -301,9 +303,9 @@ function HeroSection() {
                   <Link
                     href="https://wa.me/919636504390?text=Hi%20Harsh,%20I'd%20like%20to%20schedule%20an%20interview%20at%20the%20following%20time:"
                     target="_blank"
-                    className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                    className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200"
                   >
-                    <BsWhatsapp size={16} />
+                    <BsWhatsapp size={14} />
                     <span>Request Time Slot</span>
                   </Link>
                 </div>
