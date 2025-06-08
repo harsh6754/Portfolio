@@ -97,7 +97,7 @@ function HeroSection() {
         )}
       </AnimatePresence>
 
-      {/* Job Availability Banner with LinkedIn and WhatsApp Links */}
+      {/* Enhanced Job Availability Banner with OPEN TO WORK first */}
       <AnimatePresence>
         {showJobBanner && (
           <motion.div
@@ -105,44 +105,74 @@ function HeroSection() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="fixed top-0 inset-x-0 z-50 py-3 px-4 bg-gradient-to-r from-violet-600/90 to-pink-500/90 backdrop-blur-sm shadow-lg"
+            className="fixed top-0 inset-x-0 z-50 py-3 px-4 bg-gradient-to-r from-violet-600/90 to-pink-500/90 backdrop-blur-sm shadow-lg border-b border-white/10"
           >
-            <div className="container mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div className="container mx-auto flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center">
-                <span className="bg-white/20 p-1.5 rounded-full mr-3">
-                  <HiOutlineStatusOnline className="text-white animate-pulse" size={16} />
-                </span>
-                <p className="text-white font-medium">
-                  <span className="font-bold">Open to Work:</span> Currently seeking Software Engineer opportunities!
-                </p>
+                <div className="bg-white/20 p-2 rounded-full mr-3 animate-pulse">
+                  <HiOutlineStatusOnline className="text-white" size={18} />
+                </div>
+                <div>
+                  {/* First: Job seeking status - Highlighted and more prominent */}
+                  <div className="flex items-center mb-1.5">
+                    <span className="bg-emerald-500/40 text-emerald-100 px-3 py-1 rounded text-sm font-bold mr-3 border border-emerald-400/30 shadow-sm">
+                      OPEN TO WORK
+                    </span>
+                    <span className="text-white font-medium">Actively seeking software engineering opportunities</span>
+                  </div>
+                  
+                  {/* Second: Experience */}
+                  <p className="text-white/90 text-sm">
+                    Currently <span className="font-bold">Software Engineer</span> at <span className="text-yellow-300">Casepoint</span> with <span className="font-medium">1 year experience</span>
+                  </p>
+                  
+                  {/* Third: Notice period */}
+                  <p className="text-white/80 text-sm mt-1">
+                    <span className="text-yellow-200 font-medium">15-day notice period</span> • Available for immediate interviews
+                  </p>
+                </div>
               </div>
               
               <div className="flex items-center gap-3 flex-wrap">
                 <Link 
                   href="https://www.linkedin.com/in/harsh2810" 
                   target="_blank"
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200"
+                  className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 shadow-md"
                 >
                   <BsLinkedin size={14} />
                   <span>Connect on LinkedIn</span>
                 </Link>
                 
-                {/* WhatsApp Link */}
                 <Link 
                   href="https://wa.me/919636504390" 
                   target="_blank"
-                  className="flex items-center gap-1.5 bg-green-500/30 hover:bg-green-500/40 text-white px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200"
+                  className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 shadow-md"
                 >
                   <BsWhatsapp size={14} />
-                  <span>Chat on WhatsApp</span>
+                  <span>Schedule Interview</span>
                 </Link>
                 
                 <button 
+                  onClick={() => {
+                    // Scroll to contact section instead of experience
+                    const contactSection = document.getElementById('contact');
+                    if (contactSection) {
+                      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    setShowJobBanner(false);
+                  }}
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200"
+                >
+                  <RiContactsFill size={14} />
+                  <span>Contact Now</span>
+                </button>
+                
+                <button 
                   onClick={handleBannerClose}
-                  className="text-white/80 hover:text-white"
+                  className="text-white/80 hover:text-white p-1 rounded-full bg-black/20 hover:bg-black/30 transition-all"
                   aria-label="Close notification"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M18 6L6 18M6 6l12 12"></path>
                   </svg>
                 </button>
@@ -379,6 +409,7 @@ function HeroSection() {
           </div>
         </div>
       </div>
+      
     </section>
   );
 };
