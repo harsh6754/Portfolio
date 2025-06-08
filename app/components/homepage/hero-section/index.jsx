@@ -18,7 +18,8 @@ import { motion, AnimatePresence } from "framer-motion";
 function HeroSection() {
   const [showJobBanner, setShowJobBanner] = useState(true);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
-  const [showToast, setShowToast] = useState(false); // New state for toast notification
+  const [showToast, setShowToast] = useState(false);
+  const [showSchedulePopup, setShowSchedulePopup] = useState(false); // New state for availability calendar
 
   useEffect(() => {
     // Hide the banner after 10 seconds and scroll to experience section
@@ -70,6 +71,11 @@ function HeroSection() {
   // Toggle video popup (kept for future implementation)
   const toggleVideoPopup = () => {
     setShowVideoPopup(!showVideoPopup);
+  };
+
+  // Toggle schedule popup
+  const toggleSchedulePopup = () => {
+    setShowSchedulePopup(!showSchedulePopup);
   };
 
   return (
@@ -126,10 +132,20 @@ function HeroSection() {
                     Currently <span className="font-bold">Software Engineer</span> at <span className="text-yellow-300">Casepoint</span> with <span className="font-medium">1 year experience</span>
                   </p>
                   
-                  {/* Third: Notice period */}
-                  <p className="text-white/80 text-sm mt-1">
-                    <span className="text-yellow-200 font-medium">15-day notice period</span> • Available for immediate interviews
-                  </p>
+                  {/* Third: Notice period and availability */}
+                  <div className="text-white/80 text-sm mt-1 space-y-1">
+                    <p>
+                      <span className="text-yellow-200 font-medium">15-day notice period</span> • Available for immediate interviews
+                    </p>
+                    <p className="flex items-center gap-1.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>
+                        <span className="text-gray-300">Available:</span> Mon-Fri <span className="text-cyan-300">after 8pm</span> • Sat-Sun <span className="text-cyan-300">anytime</span>
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
               
@@ -142,6 +158,17 @@ function HeroSection() {
                   <BsLinkedin size={14} />
                   <span>Connect on LinkedIn</span>
                 </Link>
+                
+                {/* New button for schedule popup */}
+                <button 
+                  onClick={toggleSchedulePopup}
+                  className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 shadow-md"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span>Check Availability</span>
+                </button>
                 
                 <Link 
                   href="https://wa.me/919636504390" 
@@ -181,37 +208,107 @@ function HeroSection() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Video Popup (kept for future implementation) */}
+      
+      {/* New Interview Schedule Calendar Popup - Fixed Height */}
       <AnimatePresence>
-        {showVideoPopup && (
+        {showSchedulePopup && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
           >
             <motion.div 
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
-              className="relative w-full max-w-4xl p-2 rounded-lg"
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="relative w-full max-w-xl bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
             >
-              <button
-                onClick={toggleVideoPopup}
-                className="absolute -top-12 right-0 p-2 text-white hover:text-pink-500 transition-colors"
-                aria-label="Close video"
-              >
-                <MdClose size={24} />
-              </button>
-              <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-2xl">
-                <iframe 
-                  className="absolute top-0 left-0 w-full h-full border-0"
-                  src="" 
-                  title="Portfolio Video"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+              <div className="flex items-center justify-between bg-gradient-to-r from-violet-600/90 to-pink-500/90 px-6 py-3">
+                <h3 className="text-white font-bold text-lg">Interview Availability</h3>
+                <button
+                  onClick={toggleSchedulePopup}
+                  className="text-white/80 hover:text-white p-1 rounded-full bg-black/20 hover:bg-black/30 transition-all"
+                  aria-label="Close schedule"
+                >
+                  <MdClose size={20} />
+                </button>
+              </div>
+              
+              <div className="p-5 overflow-y-auto">
+                {/* Compact calendar display */}
+                <div className="grid grid-cols-7 mb-3 text-center text-xs font-medium text-gray-400">
+                  <div>Su</div>
+                  <div>Mo</div>
+                  <div>Tu</div>
+                  <div>We</div>
+                  <div>Th</div>
+                  <div>Fr</div>
+                  <div>Sa</div>
+                </div>
+                
+                {/* Smaller calendar grid */}
+                <div className="grid grid-cols-7 gap-1 mb-4">
+                  {Array.from({ length: 31 }).map((_, i) => (
+                    <div 
+                      key={i} 
+                      className={`
+                        aspect-square flex items-center justify-center text-xs rounded-md
+                        ${i % 7 === 0 || i % 7 === 6 
+                          ? "bg-green-500/20 border border-green-500/30 text-green-400" 
+                          : "bg-indigo-500/20 border border-indigo-500/30 text-indigo-400"}
+                      `}
+                    >
+                      {i + 1}
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="space-y-4">
+                  {/* Weekday availability - more compact */}
+                  <div>
+                    <h4 className="text-white font-semibold flex items-center mb-2 text-sm">
+                      <span className="h-2.5 w-2.5 bg-indigo-500 rounded-full mr-2"></span>
+                      Weekday Availability (Monday-Friday)
+                    </h4>
+                    <div className="bg-[#161b38] rounded-lg p-3 border border-[#1f223c]">
+                      <p className="text-gray-300 text-xs leading-relaxed">
+                        Available <span className="text-indigo-400 font-medium">after 8:00 PM</span> on weekdays.
+                        Preferred slots: <span className="text-indigo-400 font-medium">8:00 PM - 11:00 PM</span>.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Weekend availability - more compact */}
+                  <div>
+                    <h4 className="text-white font-semibold flex items-center mb-2 text-sm">
+                      <span className="h-2.5 w-2.5 bg-green-500 rounded-full mr-2"></span>
+                      Weekend Availability (Saturday-Sunday)
+                    </h4>
+                    <div className="bg-[#161b38] rounded-lg p-3 border border-[#1f223c]">
+                      <p className="text-gray-300 text-xs leading-relaxed">
+                        Available <span className="text-green-400 font-medium">anytime</span> between 
+                        <span className="text-green-400 font-medium"> 9:00 AM - 8:00 PM</span> on weekends.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-4 pt-4 border-t border-[#1f223c] flex justify-between">
+                  <div className="text-gray-300 text-xs">
+                    <p>Need a different time?</p>
+                    <p>Let's coordinate to find a suitable slot.</p>
+                  </div>
+                  
+                  <Link
+                    href="https://wa.me/919636504390?text=Hi%20Harsh,%20I'd%20like%20to%20schedule%20an%20interview%20at%20the%20following%20time:"
+                    target="_blank"
+                    className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200"
+                  >
+                    <BsWhatsapp size={14} />
+                    <span>Request Time Slot</span>
+                  </Link>
+                </div>
               </div>
             </motion.div>
           </motion.div>
