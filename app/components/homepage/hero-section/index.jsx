@@ -19,7 +19,17 @@ function HeroSection() {
   const [showJobBanner, setShowJobBanner] = useState(true);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [showSchedulePopup, setShowSchedulePopup] = useState(false); // New state for availability calendar
+  const [showSchedulePopup, setShowSchedulePopup] = useState(false);
+  
+  // New state variables for scheduling process
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [showTimePopup, setShowTimePopup] = useState(false);
+  const [showCompanyPopup, setShowCompanyPopup] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [companyName, setCompanyName] = useState("");
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
   useEffect(() => {
     // Hide the banner after 10 seconds and scroll to experience section
@@ -76,6 +86,124 @@ function HeroSection() {
   // Toggle schedule popup
   const toggleSchedulePopup = () => {
     setShowSchedulePopup(!showSchedulePopup);
+  };
+
+  // Format date for display
+  const formatDate = (date) => {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(date).toLocaleDateString('en-US', options);
+  };
+
+  // Handle date selection with past date prevention
+  const handleDateSelect = (day) => {
+    const selectedDate = new Date(currentYear, currentMonth, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for comparison
+    
+    // Only proceed if selected date is today or in the future
+    if (selectedDate >= today) {
+      setSelectedDate(selectedDate);
+      setShowConfirmPopup(true);
+    }
+    // No need to do anything for past dates - they just won't respond
+  };
+
+  // Handle confirmation
+  const handleConfirmInterview = () => {
+    setShowConfirmPopup(false);
+    setShowTimePopup(true);
+  };
+
+  // Handle time selection
+  const handleTimeSelect = (time) => {
+    setSelectedTime(time);
+    setShowTimePopup(false);
+    setShowCompanyPopup(true);
+  };
+
+  // Handle company submission
+  const handleCompanySubmit = () => {
+    // Format date and time for WhatsApp message
+    const formattedDate = formatDate(selectedDate);
+    const message = `Hi Harsh, I'd like to schedule an interview on ${formattedDate} at ${selectedTime} from ${companyName}.`;
+    
+    // Create WhatsApp URL with encoded message
+    const whatsappUrl = `https://wa.me/919636504390?text=${encodeURIComponent(message)}`;
+    
+    // Reset all states
+    setShowCompanyPopup(false);
+    setShowSchedulePopup(false);
+    setSelectedDate(null);
+    setSelectedTime(null);
+    setCompanyName("");
+    
+    // Open WhatsApp in new tab
+    window.open(whatsappUrl, '_blank');
+  };
+
+  // Generate calendar days
+  const getDaysInMonth = (year, month) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+  
+  const getFirstDayOfMonth = (year, month) => {
+    return new Date(year, month, 1).getDay();
+  };
+  
+  const generateCalendarDays = () => {
+    const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+    const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
+    const days = [];
+    
+    // Add empty cells for days before the first day of month
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+    
+    // Add days of the month
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(i);
+    }
+    
+    return days;
+  };
+  
+  const calendarDays = generateCalendarDays();
+  
+  // Get month name
+  const getMonthName = (month) => {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June', 
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return months[month];
+  };
+  
+  // Handle month navigation
+  const prevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+  
+  const nextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  // Check if a date is in the past
+  const isDateInPast = (year, month, day) => {
+    const date = new Date(year, month, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for comparison
+    return date < today;
   };
 
   return (
@@ -236,8 +364,31 @@ function HeroSection() {
               </div>
               
               <div className="p-5 overflow-y-auto">
-                {/* Compact calendar display */}
-                <div className="grid grid-cols-7 mb-3 text-center text-xs font-medium text-gray-400">
+                {/* Month navigation */}
+                <div className="flex items-center justify-between mb-4">
+                  <button 
+                    onClick={prevMonth}
+                    className="p-1 rounded-full hover:bg-violet-500/20"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                  <h4 className="text-white font-medium">
+                    {getMonthName(currentMonth)} {currentYear}
+                  </h4>
+                  <button 
+                    onClick={nextMonth}
+                    className="p-1 rounded-full hover:bg-violet-500/20"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+                
+                {/* Day headers */}
+                <div className="grid grid-cols-7 mb-2 text-center text-xs font-medium text-gray-400">
                   <div>Su</div>
                   <div>Mo</div>
                   <div>Tu</div>
@@ -247,25 +398,35 @@ function HeroSection() {
                   <div>Sa</div>
                 </div>
                 
-                {/* Smaller calendar grid */}
+                {/* Calendar grid */}
                 <div className="grid grid-cols-7 gap-1 mb-4">
-                  {Array.from({ length: 31 }).map((_, i) => (
-                    <div 
-                      key={i} 
-                      className={`
-                        aspect-square flex items-center justify-center text-xs rounded-md
-                        ${i % 7 === 0 || i % 7 === 6 
-                          ? "bg-green-500/20 border border-green-500/30 text-green-400" 
-                          : "bg-indigo-500/20 border border-indigo-500/30 text-indigo-400"}
-                      `}
-                    >
-                      {i + 1}
-                    </div>
-                  ))}
+                  {calendarDays.map((day, i) => {
+                    // Check if the date is in the past
+                    const isPastDate = day !== null && isDateInPast(currentYear, currentMonth, day);
+                    
+                    return (
+                      <div 
+                        key={i} 
+                        className={`
+                          aspect-square flex items-center justify-center text-sm rounded-md
+                          ${day === null ? "bg-transparent" : 
+                            isPastDate ? 
+                              "bg-gray-500/20 border border-gray-500/30 text-gray-500 cursor-not-allowed" :
+                              i % 7 === 0 || i % 7 === 6 
+                                ? "bg-green-500/20 border border-green-500/30 text-green-400 cursor-pointer hover:bg-green-500/30" 
+                                : "bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 cursor-pointer hover:bg-indigo-500/30"
+                          }
+                        `}
+                        onClick={() => day !== null && !isPastDate && handleDateSelect(day)}
+                      >
+                        {day}
+                      </div>
+                    );
+                  })}
                 </div>
                 
                 <div className="space-y-4">
-                  {/* Weekday availability - more compact */}
+                  {/* Weekday availability */}
                   <div>
                     <h4 className="text-white font-semibold flex items-center mb-2 text-sm">
                       <span className="h-2.5 w-2.5 bg-indigo-500 rounded-full mr-2"></span>
@@ -279,7 +440,7 @@ function HeroSection() {
                     </div>
                   </div>
                   
-                  {/* Weekend availability - more compact */}
+                  {/* Weekend availability */}
                   <div>
                     <h4 className="text-white font-semibold flex items-center mb-2 text-sm">
                       <span className="h-2.5 w-2.5 bg-green-500 rounded-full mr-2"></span>
@@ -294,27 +455,170 @@ function HeroSection() {
                   </div>
                 </div>
                 
-                <div className="mt-4 pt-4 border-t border-[#1f223c] flex justify-between">
-                  <div className="text-gray-300 text-xs">
-                    <p>Need a different time?</p>
-                    <p>Let&apos;s coordinate to find a suitable slot.</p>
-                  </div>
-                  
-                  <Link
-                    href="https://wa.me/919636504390?text=Hi%20Harsh,%20I'd%20like%20to%20schedule%20an%20interview%20at%20the%20following%20time:"
-                    target="_blank"
-                    className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200"
-                  >
-                    <BsWhatsapp size={14} />
-                    <span>Request Time Slot</span>
-                  </Link>
+                <div className="mt-4 pt-4 border-t border-[#1f223c]">
+                  <p className="text-gray-300 text-xs">
+                    Click on a date to schedule an interview.
+                  </p>
                 </div>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-
+      
+      {/* Confirmation Popup */}
+      <AnimatePresence>
+        {showConfirmPopup && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full"
+            >
+              <h3 className="text-white font-bold text-xl mb-4">Confirm Interview Date</h3>
+              <p className="text-gray-300 mb-6">
+                Are you sure you want to schedule an interview on <span className="text-pink-400 font-medium">{formatDate(selectedDate)}</span>?
+              </p>
+              
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowConfirmPopup(false)}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmInterview}
+                  className="px-4 py-2 bg-gradient-to-r from-violet-600 to-pink-500 hover:from-violet-700 hover:to-pink-600 text-white rounded-lg text-sm"
+                >
+                  Yes, Continue
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Time Selection Popup */}
+      <AnimatePresence>
+        {showTimePopup && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full"
+            >
+              <h3 className="text-white font-bold text-xl mb-4">Select Interview Time</h3>
+              <p className="text-gray-300 mb-4">
+                Please select a preferred time for your interview on <span className="text-pink-400 font-medium">{formatDate(selectedDate)}</span>:
+              </p>
+              
+              <div className="grid grid-cols-2 gap-2 mb-6">
+                {selectedDate && selectedDate.getDay() % 6 === 0 ? (
+                  // Weekend times
+                  <>
+                    <button onClick={() => handleTimeSelect("9:00 AM")} className="p-2 bg-[#161b38] hover:bg-green-500/20 border border-[#1f223c] hover:border-green-500/30 rounded-lg text-green-400 text-sm">9:00 AM</button>
+                    <button onClick={() => handleTimeSelect("10:00 AM")} className="p-2 bg-[#161b38] hover:bg-green-500/20 border border-[#1f223c] hover:border-green-500/30 rounded-lg text-green-400 text-sm">10:00 AM</button>
+                    <button onClick={() => handleTimeSelect("11:00 AM")} className="p-2 bg-[#161b38] hover:bg-green-500/20 border border-[#1f223c] hover:border-green-500/30 rounded-lg text-green-400 text-sm">11:00 AM</button>
+                    <button onClick={() => handleTimeSelect("12:00 PM")} className="p-2 bg-[#161b38] hover:bg-green-500/20 border border-[#1f223c] hover:border-green-500/30 rounded-lg text-green-400 text-sm">12:00 PM</button>
+                    <button onClick={() => handleTimeSelect("1:00 PM")} className="p-2 bg-[#161b38] hover:bg-green-500/20 border border-[#1f223c] hover:border-green-500/30 rounded-lg text-green-400 text-sm">1:00 PM</button>
+                    <button onClick={() => handleTimeSelect("2:00 PM")} className="p-2 bg-[#161b38] hover:bg-green-500/20 border border-[#1f223c] hover:border-green-500/30 rounded-lg text-green-400 text-sm">2:00 PM</button>
+                    <button onClick={() => handleTimeSelect("3:00 PM")} className="p-2 bg-[#161b38] hover:bg-green-500/20 border border-[#1f223c] hover:border-green-500/30 rounded-lg text-green-400 text-sm">3:00 PM</button>
+                    <button onClick={() => handleTimeSelect("4:00 PM")} className="p-2 bg-[#161b38] hover:bg-green-500/20 border border-[#1f223c] hover:border-green-500/30 rounded-lg text-green-400 text-sm">4:00 PM</button>
+                  </>
+                ) : (
+                  // Weekday times
+                  <>
+                    <button onClick={() => handleTimeSelect("8:00 PM")} className="p-2 bg-[#161b38] hover:bg-indigo-500/20 border border-[#1f223c] hover:border-indigo-500/30 rounded-lg text-indigo-400 text-sm">8:00 PM</button>
+                    <button onClick={() => handleTimeSelect("8:30 PM")} className="p-2 bg-[#161b38] hover:bg-indigo-500/20 border border-[#1f223c] hover:border-indigo-500/30 rounded-lg text-indigo-400 text-sm">8:30 PM</button>
+                    <button onClick={() => handleTimeSelect("9:00 PM")} className="p-2 bg-[#161b38] hover:bg-indigo-500/20 border border-[#1f223c] hover:border-indigo-500/30 rounded-lg text-indigo-400 text-sm">9:00 PM</button>
+                    <button onClick={() => handleTimeSelect("9:30 PM")} className="p-2 bg-[#161b38] hover:bg-indigo-500/20 border border-[#1f223c] hover:border-indigo-500/30 rounded-lg text-indigo-400 text-sm">9:30 PM</button>
+                    <button onClick={() => handleTimeSelect("10:00 PM")} className="p-2 bg-[#161b38] hover:bg-indigo-500/20 border border-[#1f223c] hover:border-indigo-500/30 rounded-lg text-indigo-400 text-sm">10:00 PM</button>
+                    <button onClick={() => handleTimeSelect("10:30 PM")} className="p-2 bg-[#161b38] hover:bg-indigo-500/20 border border-[#1f223c] hover:border-indigo-500/30 rounded-lg text-indigo-400 text-sm">10:30 PM</button>
+                  </>
+                )}
+              </div>
+              
+              <div className="flex justify-end">
+                <button
+                  onClick={() => {
+                    setShowTimePopup(false);
+                    setShowConfirmPopup(false);
+                  }}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
+                >
+                  Cancel
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Company Name Popup */}
+      <AnimatePresence>
+        {showCompanyPopup && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full"
+            >
+              <h3 className="text-white font-bold text-xl mb-4">Company Information</h3>
+              <p className="text-gray-300 mb-4">
+                Please enter your company name for the interview on <span className="text-pink-400 font-medium">{formatDate(selectedDate)}</span> at <span className="text-pink-400 font-medium">{selectedTime}</span>:
+              </p>
+              
+              <input
+                type="text"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                placeholder="Enter company name"
+                className="w-full p-3 bg-[#161b38] border border-[#1f223c] focus:border-violet-500 rounded-lg text-white mb-6 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+              />
+              
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setShowCompanyPopup(false);
+                    setShowTimePopup(false);
+                    setShowConfirmPopup(false);
+                  }}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCompanySubmit}
+                  disabled={!companyName.trim()}
+                  className={`px-4 py-2 ${companyName.trim() ? 'bg-gradient-to-r from-violet-600 to-pink-500 hover:from-violet-700 hover:to-pink-600' : 'bg-gray-600 cursor-not-allowed'} text-white rounded-lg text-sm`}
+                >
+                  Send Interview Request
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
       <div className="grid grid-cols-1 items-start lg:grid-cols-2 lg:gap-12 gap-y-8">
         <div className="order-2 lg:order-1 flex flex-col items-start justify-center p-2 pb-20 md:pb-10 lg:pt-10">
           <h1 className="text-3xl font-bold leading-10 text-white md:font-extrabold lg:text-[2.6rem] lg:leading-[3.5rem]">
