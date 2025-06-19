@@ -158,11 +158,11 @@ function Experience() {
         </div>
       </div>
 
-      {/* Experience details modal */}
+      {/* Experience details modal - with height adjustments */}
       {selectedExp && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={closeModal}>
           <motion.div 
-            className="bg-gradient-to-br from-[#0c0921] to-[#1a1443] max-w-3xl w-full rounded-xl border border-[#464c6a]/30 shadow-2xl overflow-hidden"
+            className="bg-gradient-to-br from-[#0c0921] to-[#1a1443] max-w-3xl w-full rounded-xl border border-[#464c6a]/30 shadow-2xl overflow-hidden max-h-[85vh]" 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
@@ -170,15 +170,15 @@ function Experience() {
             onClick={(e) => e.stopPropagation()}
             ref={modalRef}
           >
-            <div className="relative">
+            <div className="relative h-full">
               <button 
-                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white"
+                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white z-10"
                 onClick={closeModal}
               >
                 <BsX size={20} />
               </button>
               
-              <div className="p-6 md:p-8">
+              <div className="p-6 md:p-8 overflow-y-auto max-h-[85vh]">
                 <div className="inline-block px-3 py-1 mb-3 text-xs font-medium text-[#16f2b3] bg-[#16f2b3]/10 rounded-full">
                   {selectedExp.duration}
                 </div>
@@ -232,7 +232,39 @@ function Experience() {
                   </div>
                 )}
                 
-                {selectedExp.imageUrl && (
+                {selectedExp.projects && selectedExp.projects.length > 0 ? (
+                  <div className="mt-6">
+                    <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                      <span className="text-[#16f2b3]">Projects Created</span>
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {selectedExp.projects.map((project, idx) => (
+                        <div 
+                          key={idx}
+                          className="bg-[#0c0921]/70 rounded-lg overflow-hidden border border-[#464c6a]/30 hover:border-[#16f2b3]/30 transition-all duration-300 cursor-pointer group"
+                          onClick={() => handleImageClick(project.imageUrl)}
+                        >
+                          <div className="relative h-32"> {/* Reduced height from h-40 to h-32 */}
+                            {project.imageUrl && (
+                              <Image 
+                                src={project.imageUrl} 
+                                alt={project.title || `Project ${idx + 1}`}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                            )}
+                          </div>
+                          <div className="p-3"> {/* Reduced padding from p-4 to p-3 */}
+                            <h5 className="text-white font-medium mb-1">{project.title || `Project ${idx + 1}`}</h5>
+                            {project.description && (
+                              <p className="text-gray-300 text-xs line-clamp-2">{project.description}</p> 
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : selectedExp.imageUrl ? (
                   <div className="mt-6">
                     <h4 className="text-white font-medium mb-3">Project Screenshot</h4>
                     <div 
@@ -244,11 +276,11 @@ function Experience() {
                         alt={`${selectedExp.company} project`}
                         width={800}
                         height={450}
-                        className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
+                        className="w-full h-auto max-h-[300px] object-cover hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                   </div>
-                )}
+                ) : null}
               </div>
             </div>
           </motion.div>

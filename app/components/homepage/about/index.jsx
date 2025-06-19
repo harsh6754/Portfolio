@@ -5,10 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const images = [
-  "/slider6.jpg",
-  "/slider8.jpg",
-  "/slider9.jpg",
-  "/slider10.jpg",
+  "./slider11.jpeg",
+  "./slider12.jpeg",
+  "./slider13.jpeg",
+  "./slider14.jpeg",
+  "./slider15.jpeg",
+  "./slider16.jpeg",
+  "./slider17.jpeg",
+  "./slider18.jpeg",
+  "./slider19.jpeg"
 ];
 
 function AboutSection() {
