@@ -30,6 +30,10 @@ function HeroSection() {
   const [companyName, setCompanyName] = useState("");
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  
+  // New state variables for company suggestions
+  const [companySuggestions, setCompanySuggestions] = useState([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
   useEffect(() => {
     // Hide the banner after 10 seconds and scroll to experience section
@@ -204,6 +208,40 @@ function HeroSection() {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Reset time to start of day for comparison
     return date < today;
+  };
+
+  // Fetch company suggestions from Clearbit API
+  const fetchCompanySuggestions = async (query) => {
+    if (!query || query.length < 2) {
+      setCompanySuggestions([]);
+      return;
+    }
+    
+    setIsLoadingSuggestions(true);
+    try {
+      const response = await fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=${encodeURIComponent(query)}`);
+      if (response.ok) {
+        const data = await response.json();
+        // Filter to likely IT/tech companies
+        const techCompanies = data.filter(company => 
+          company.name.toLowerCase().includes(query.toLowerCase()) || 
+          (company.domain && (
+            company.domain.includes('tech') || 
+            company.domain.includes('software') || 
+            company.domain.includes('digital') || 
+            company.domain.includes('app') || 
+            company.domain.includes('cloud') ||
+            company.domain.includes('ai') ||
+            company.domain.includes('data')
+          ))
+        );
+        setCompanySuggestions(techCompanies);
+      }
+    } catch (error) {
+      console.error("Error fetching company suggestions:", error);
+    } finally {
+      setIsLoadingSuggestions(false);
+    }
   };
 
   return (
@@ -479,8 +517,17 @@ function HeroSection() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full"
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full relative"
             >
+              {/* Add close button */}
+              <button 
+                onClick={() => setShowConfirmPopup(false)}
+                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white z-10"
+                aria-label="Close confirmation"
+              >
+                <MdClose size={16} />
+              </button>
+              
               <h3 className="text-white font-bold text-xl mb-4">Confirm Interview Date</h3>
               <p className="text-gray-300 mb-6">
                 Are you sure you want to schedule an interview on <span className="text-pink-400 font-medium">{formatDate(selectedDate)}</span>?
@@ -518,8 +565,20 @@ function HeroSection() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full"
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full relative"
             >
+              {/* Add close button */}
+              <button 
+                onClick={() => {
+                  setShowTimePopup(false);
+                  setShowConfirmPopup(false);
+                }}
+                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white z-10"
+                aria-label="Close time selection"
+              >
+                <MdClose size={16} />
+              </button>
+              
               <h3 className="text-white font-bold text-xl mb-4">Select Interview Time</h3>
               <p className="text-gray-300 mb-4">
                 Please select a preferred time for your interview on <span className="text-pink-400 font-medium">{formatDate(selectedDate)}</span>:
@@ -580,20 +639,72 @@ function HeroSection() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full"
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full relative"
             >
+              {/* Add close button */}
+              <button 
+                onClick={() => {
+                  setShowCompanyPopup(false);
+                  setShowTimePopup(false);
+                  setShowConfirmPopup(false);
+                }}
+                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white z-10"
+                aria-label="Close company popup"
+              >
+                <MdClose size={16} />
+              </button>
+              
               <h3 className="text-white font-bold text-xl mb-4">Company Information</h3>
               <p className="text-gray-300 mb-4">
                 Please enter your company name for the interview on <span className="text-pink-400 font-medium">{formatDate(selectedDate)}</span> at <span className="text-pink-400 font-medium">{selectedTime}</span>:
               </p>
               
-              <input
-                type="text"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Enter company name"
-                className="w-full p-3 bg-[#161b38] border border-[#1f223c] focus:border-violet-500 rounded-lg text-white mb-6 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
-              />
+              {/* Company input with autocomplete */}
+              <div className="relative w-full mb-6">
+                <input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => {
+                    setCompanyName(e.target.value);
+                    fetchCompanySuggestions(e.target.value);
+                  }}
+                  placeholder="Enter company name"
+                  className="w-full p-3 bg-[#161b38] border border-[#1f223c] focus:border-violet-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+                />
+                
+                {/* Loading indicator */}
+                {isLoadingSuggestions && (
+                  <div className="absolute right-3 top-3">
+                    <div className="w-5 h-5 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
+                
+                {/* Company suggestions dropdown */}
+                {companySuggestions.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-[#0d1224] border border-[#1f223c] rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                    {companySuggestions.map((company, idx) => (
+                      <div 
+                        key={idx}
+                        className="p-3 hover:bg-[#161b38] cursor-pointer flex items-center gap-3 border-b border-[#1f223c] last:border-0"
+                        onClick={() => {
+                          setCompanyName(company.name);
+                          setCompanySuggestions([]);
+                        }}
+                      >
+                        {company.logo && (
+                          <img src={company.logo} alt={company.name} className="w-6 h-6 rounded" />
+                        )}
+                        <div>
+                          <div className="text-white font-medium">{company.name}</div>
+                          {company.domain && (
+                            <div className="text-gray-400 text-xs">{company.domain}</div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               
               <div className="flex justify-end gap-3">
                 <button
