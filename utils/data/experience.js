@@ -4,7 +4,7 @@ export const experiences = [
     id:1,
     title:"Software Engineer",
     company:"Casepoint llc",
-    duration:"(Jan 2025 - Present)",
+    duration:"(April 2024 - Present)",
     imageUrl:"image/ayla.jpg",
     projects: [
       {

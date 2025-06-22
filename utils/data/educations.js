@@ -4,7 +4,7 @@ export const educations = [
     title: "Bachelor's Degree",
     duration: "2021 - Present",
     institution: "Parul University, Vadodara, Gujarat",
-    CGPA: "CGPA :- 7.77",
+    CGPA: "CGPA :- 8.0",
   },
   {
     id: 2,
