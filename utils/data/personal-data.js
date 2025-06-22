@@ -1,7 +1,7 @@
 export const personalData = {
   name: "Harsh Agrawal",
   profile: '/profile.png',
-  designation: "Full Stack Developer ",
+  designation: "Software Engineer",
   description: [
   "💻 Results-driven Software Engineer with expertise in JavaScript and full-stack web development.",
   "🚀 Passionate about building scalable, high-performance applications that enhance user experience.",
@@ -14,13 +14,13 @@ export const personalData = {
 ],
   email: 'agrawalharsh1028@gmail.com',
   phone: '+91-9636504390',
-  address: '107 Shrimal Nagar, Bhinmal, Jalore - 343029, Rajasthan, India ',
+  address: 'G3, jupiter apartment, chennappa layout chinnapannahalli bangalore ',
   github: 'https://github.com/harsh6754',
   facebook: 'https://www.facebook.com/',
   linkedIn: 'https://www.linkedin.com/in/harsh2810',
   twitter: 'https://twitter.com/',
   stackOverflow: 'https://stackoverflow.com/users/',
-  leetcode: "https://leetcode.com/harsh1028/",
+  leetcode: "https://leetcode.com/h_agrawal6754/",
   devUsername: "",
   resume: "https://drive.google.com/file/d/1bJwdw84_EllX2hl_phLSZ56CWMXyWAyS/view?usp=sharing",
 
