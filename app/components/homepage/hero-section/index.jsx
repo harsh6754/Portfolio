@@ -49,6 +49,10 @@ function HeroSection() {
   const [companySuggestions, setCompanySuggestions] = useState([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
+  // Add this state at the top with other useState hooks
+  const [scheduledInterviews, setScheduledInterviews] = useState([]); // [{date: 'YYYY-MM-DD', time: 'HH:mm'}]
+  const [scheduleError, setScheduleError] = useState(""); // For error message
+
   useEffect(() => {
     // Hide the banner after 10 seconds and scroll to experience section
     const timer = setTimeout(() => {
@@ -141,13 +145,32 @@ function HeroSection() {
 
   // Handle company submission (Schedule Interview flow)
   const handleCompanySubmit = () => {
+    const formattedDate = selectedDate.toISOString().split("T")[0];
+    const formattedTime = selectedTime;
+
+    // Convert selected time to minutes
+    const selectedMinutes = parseTimeToMinutes(formattedTime);
+
+    // Check for 1 hour gap conflict
+    const conflict = scheduledInterviews.some(interview => {
+      if (interview.date !== formattedDate) return false;
+      const interviewMinutes = parseTimeToMinutes(interview.time);
+      return Math.abs(interviewMinutes - selectedMinutes) < 60; // less than 1 hour apart
+    });
+
+    if (conflict) {
+      setScheduleError("Already scheduled an interview at this time. Please select another time with at least 1 hour gap.");
+      return;
+    }
+
+    // No conflict, proceed
+    setScheduledInterviews([...scheduledInterviews, { date: formattedDate, time: formattedTime }]);
+    setScheduleError(""); // Clear error
+
     // Format date and time for WhatsApp message
-    const formattedDate = formatDate(selectedDate);
-    // Interview schedule message (simple)
-    const message = `Hi Harsh, I'd like to schedule an interview on ${formattedDate} at ${selectedTime} from ${companyName}.`;
+    const message = `Hi Harsh, I'd like to schedule an interview on ${formatDate(selectedDate)} at ${selectedTime} from ${companyName}.`;
     // Create WhatsApp URL with encoded message
     const whatsappUrl = `https://wa.me/919636504390?text=${encodeURIComponent(message)}`;
-    // Reset all states
     setShowCompanyPopup(false);
     setShowSchedulePopup(false);
     setSelectedDate(null);
@@ -156,6 +179,16 @@ function HeroSection() {
     // Open WhatsApp in new tab
     window.open(whatsappUrl, '_blank');
   };
+
+  // Helper to convert "h:mm AM/PM" to minutes since midnight
+  function parseTimeToMinutes(timeStr) {
+    if (!timeStr) return 0;
+    const [time, modifier] = timeStr.split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+    if (modifier === 'PM' && hours !== 12) hours += 12;
+    if (modifier === 'AM' && hours === 12) hours = 0;
+    return hours * 60 + minutes;
+  }
 
   // Generate calendar days
   const getDaysInMonth = (year, month) => {
@@ -290,9 +323,8 @@ function HeroSection() {
 
   // Helper to generate Google Meet code
   const generateMeetCode = () => {
-    // Google Meet codes are 3 groups of 4 letters (a-z)
-    const group = () => Array(4).fill(0).map(() => String.fromCharCode(97 + Math.floor(Math.random() * 26))).join('');
-    return `https://meet.google.com/${group()}-${group()}-${group()}`;
+    // Always return the fixed Google Meet link
+    return "https://meet.google.com/cgh-xisb-zom";
   };
 
   // Copy to clipboard
@@ -781,6 +813,10 @@ function HeroSection() {
                   </div>
                 )}
               </div>
+              
+              {scheduleError && (
+                <div className="mb-4 text-red-400 text-sm font-medium">{scheduleError}</div>
+              )}
               
               <div className="flex justify-end gap-3">
                 <button
