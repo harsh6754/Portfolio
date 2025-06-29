@@ -6,9 +6,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BsGithub, BsLinkedin, BsWhatsapp } from "react-icons/bs"; 
 import { FaFacebook, FaTwitterSquare } from "react-icons/fa";
-import { MdDownload, MdClose } from "react-icons/md";
+import { MdDownload, MdClose, MdContentCopy } from "react-icons/md";
 import { RiContactsFill } from "react-icons/ri";
-import { SiLeetcode } from "react-icons/si";
+import { SiLeetcode, SiGooglemeet } from "react-icons/si";
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { BsPlayFill } from "react-icons/bs";
 import { BiInfoCircle } from "react-icons/bi"; // Added for toast info icon
@@ -20,7 +20,21 @@ function HeroSection() {
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [showSchedulePopup, setShowSchedulePopup] = useState(false);
-  
+  const [showMeetConfirm, setShowMeetConfirm] = useState(false);
+  const [showMeetDateTime, setShowMeetDateTime] = useState(false);
+  const [meetDate, setMeetDate] = useState("");
+  const [meetTime, setMeetTime] = useState("");
+  const [meetLink, setMeetLink] = useState("");
+  const [showMeetLink, setShowMeetLink] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // New state for confirmation and company info
+  const [showMeetFinalConfirm, setShowMeetFinalConfirm] = useState(false);
+  const [meetCompanyName, setMeetCompanyName] = useState("");
+  const [meetEmployeeEmail, setMeetEmployeeEmail] = useState("");
+  const [meetCompanySuggestions, setMeetCompanySuggestions] = useState([]);
+  const [isLoadingMeetSuggestions, setIsLoadingMeetSuggestions] = useState(false);
+
   // New state variables for scheduling process
   const [selectedDate, setSelectedDate] = useState(null);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
@@ -30,8 +44,8 @@ function HeroSection() {
   const [companyName, setCompanyName] = useState("");
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  
-  // New state variables for company suggestions
+
+  // Add these two lines for interview schedule company autocomplete
   const [companySuggestions, setCompanySuggestions] = useState([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
@@ -125,22 +139,20 @@ function HeroSection() {
     setShowCompanyPopup(true);
   };
 
-  // Handle company submission
+  // Handle company submission (Schedule Interview flow)
   const handleCompanySubmit = () => {
     // Format date and time for WhatsApp message
     const formattedDate = formatDate(selectedDate);
+    // Interview schedule message (simple)
     const message = `Hi Harsh, I'd like to schedule an interview on ${formattedDate} at ${selectedTime} from ${companyName}.`;
-    
     // Create WhatsApp URL with encoded message
     const whatsappUrl = `https://wa.me/919636504390?text=${encodeURIComponent(message)}`;
-    
     // Reset all states
     setShowCompanyPopup(false);
     setShowSchedulePopup(false);
     setSelectedDate(null);
     setSelectedTime(null);
     setCompanyName("");
-    
     // Open WhatsApp in new tab
     window.open(whatsappUrl, '_blank');
   };
@@ -242,6 +254,70 @@ function HeroSection() {
     } finally {
       setIsLoadingSuggestions(false);
     }
+  };
+
+  // Fetch company suggestions for Google Meet modal
+  const fetchMeetCompanySuggestions = async (query) => {
+    if (!query || query.length < 2) {
+      setMeetCompanySuggestions([]);
+      return;
+    }
+    setIsLoadingMeetSuggestions(true);
+    try {
+      const response = await fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=${encodeURIComponent(query)}`);
+      if (response.ok) {
+        const data = await response.json();
+        const techCompanies = data.filter(company =>
+          company.name.toLowerCase().includes(query.toLowerCase()) ||
+          (company.domain && (
+            company.domain.includes('tech') ||
+            company.domain.includes('software') ||
+            company.domain.includes('digital') ||
+            company.domain.includes('app') ||
+            company.domain.includes('cloud') ||
+            company.domain.includes('ai') ||
+            company.domain.includes('data')
+          ))
+        );
+        setMeetCompanySuggestions(techCompanies);
+      }
+    } catch (error) {
+      // ignore
+    } finally {
+      setIsLoadingMeetSuggestions(false);
+    }
+  };
+
+  // Helper to generate Google Meet code
+  const generateMeetCode = () => {
+    // Google Meet codes are 3 groups of 4 letters (a-z)
+    const group = () => Array(4).fill(0).map(() => String.fromCharCode(97 + Math.floor(Math.random() * 26))).join('');
+    return `https://meet.google.com/${group()}-${group()}-${group()}`;
+  };
+
+  // Copy to clipboard
+  const handleCopy = () => {
+    navigator.clipboard.writeText(meetLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  // WhatsApp send for Google Meet (already correct, keep as is)
+  const handleSendMeetLink = () => {
+    // Compose message
+    const msg = `Hi Harsh Agrawal, I would like to schedule a Google Meet interview.\n\nCompany: ${meetCompanyName}\nWork Email: ${meetEmployeeEmail}\nDate: ${meetDate}\nTime: ${meetTime}\nMeet Link: ${meetLink}`;
+    const whatsappUrl = `https://wa.me/919636504390?text=${encodeURIComponent(msg)}`;
+    // Reset all meet-related states
+    setShowMeetFinalConfirm(false);
+    setShowMeetLink(false);
+    setMeetDate("");
+    setMeetTime("");
+    setMeetLink("");
+    setMeetCompanyName("");
+    setMeetEmployeeEmail("");
+    setMeetCompanySuggestions([]);
+    // Open WhatsApp
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -710,7 +786,7 @@ function HeroSection() {
                 <button
                   onClick={() => {
                     setShowCompanyPopup(false);
-                    setShowTimePopup(false);
+                    setTimePopup(false);
                     setShowConfirmPopup(false);
                   }}
                   className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
@@ -777,6 +853,15 @@ function HeroSection() {
             >
               <FaTwitterSquare size={30} />
             </Link>
+            {/* Google Meet Icon */}
+            <button
+              type="button"
+              className="transition-all text-green-500 hover:scale-125 duration-300"
+              onClick={() => setShowMeetConfirm(true)}
+              title="Schedule Google Meet"
+            >
+              <SiGooglemeet size={30} />
+            </button>
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
@@ -922,6 +1007,314 @@ function HeroSection() {
         </div>
       </div>
       
+      {/* Google Meet Confirmation Modal */}
+      <AnimatePresence>
+        {showMeetConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 px-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full relative"
+            >
+              <button
+                onClick={() => setShowMeetConfirm(false)}
+                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white z-10"
+                aria-label="Close confirmation"
+              >
+                <MdClose size={16} />
+              </button>
+              <h3 className="text-white font-bold text-xl mb-4">Schedule Google Meet</h3>
+              <p className="text-gray-300 mb-6">
+                Are you sure you want to schedule a meeting with <span className="text-pink-400 font-medium">Harsh</span>?
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowMeetConfirm(false)}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMeetConfirm(false);
+                    setShowMeetDateTime(true);
+                  }}
+                  className="px-4 py-2 bg-gradient-to-r from-green-600 to-blue-500 hover:from-green-700 hover:to-blue-600 text-white rounded-lg text-sm"
+                >
+                  Yes, Continue
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Google Meet Date/Time Modal */}
+      <AnimatePresence>
+        {showMeetDateTime && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 px-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full relative"
+            >
+              <button
+                onClick={() => setShowMeetDateTime(false)}
+                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white z-10"
+                aria-label="Close date/time"
+              >
+                <MdClose size={16} />
+              </button>
+              <h3 className="text-white font-bold text-xl mb-4">Select Date & Time</h3>
+              <div className="mb-4">
+                <label className="block text-gray-300 mb-1">Date</label>
+                <input
+                  type="date"
+                  className="w-full p-2 rounded bg-[#161b38] border border-[#1f223c] text-white"
+                  value={meetDate}
+                  min={new Date().toISOString().split("T")[0]}
+                  onChange={e => setMeetDate(e.target.value)}
+                />
+              </div>
+              <div className="mb-6">
+                <label className="block text-gray-300 mb-1">Time</label>
+                <input
+                  type="time"
+                  className="w-full p-2 rounded bg-[#161b38] border border-[#1f223c] text-white"
+                  value={meetTime}
+                  onChange={e => setMeetTime(e.target.value)}
+                />
+              </div>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowMeetDateTime(false)}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  disabled={!meetDate || !meetTime}
+                  onClick={() => {
+                    setMeetLink(generateMeetCode());
+                    setShowMeetDateTime(false);
+                    setShowMeetLink(true);
+                  }}
+                  className={`px-4 py-2 ${meetDate && meetTime ? 'bg-gradient-to-r from-green-600 to-blue-500 hover:from-green-700 hover:to-blue-600' : 'bg-gray-600 cursor-not-allowed'} text-white rounded-lg text-sm`}
+                >
+                  Generate Meet Link
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Google Meet Link Modal */}
+      <AnimatePresence>
+        {showMeetLink && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 px-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full relative"
+            >
+              <button
+                onClick={() => {
+                  setShowMeetLink(false);
+                  setMeetDate("");
+                  setMeetTime("");
+                  setMeetLink("");
+                  setMeetCompanyName("");
+                  setMeetEmployeeEmail("");
+                  setMeetCompanySuggestions([]);
+                }}
+                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white z-10"
+                aria-label="Close meet link"
+              >
+                <MdClose size={16} />
+              </button>
+              <h3 className="text-white font-bold text-xl mb-4">Google Meet Link</h3>
+              <p className="text-gray-300 mb-2">
+                Meeting scheduled on <span className="text-pink-400 font-medium">{meetDate}</span> at <span className="text-pink-400 font-medium">{meetTime}</span>
+              </p>
+              <div className="flex items-center bg-[#161b38] border border-[#1f223c] rounded-lg p-3 mb-4">
+                <a
+                  href={meetLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-400 underline break-all flex-1"
+                >
+                  {meetLink}
+                </a>
+                <button
+                  onClick={handleCopy}
+                  className="ml-2 text-white hover:text-green-400"
+                  title="Copy link"
+                >
+                  <MdContentCopy size={22} />
+                </button>
+              </div>
+              {copied && <div className="text-green-400 text-sm mb-2">Copied!</div>}
+              {/* Company Name Input */}
+              <div className="mb-4 relative">
+                <label className="block text-gray-300 mb-1">Company Name <span className="text-pink-400">*</span></label>
+                <input
+                  type="text"
+                  value={meetCompanyName}
+                  onChange={e => {
+                    setMeetCompanyName(e.target.value);
+                    fetchMeetCompanySuggestions(e.target.value);
+                  }}
+                  placeholder="Enter company name"
+                  className="w-full p-2 rounded bg-[#161b38] border border-[#1f223c] text-white"
+                  autoComplete="off"
+                />
+                {isLoadingMeetSuggestions && (
+                  <div className="absolute right-3 top-3">
+                    <div className="w-4 h-4 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
+                {meetCompanySuggestions.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-[#0d1224] border border-[#1f223c] rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                    {meetCompanySuggestions.map((company, idx) => (
+                      <div
+                        key={idx}
+                        className="p-2 hover:bg-[#161b38] cursor-pointer flex items-center gap-2 border-b border-[#1f223c] last:border-0"
+                        onClick={() => {
+                          setMeetCompanyName(company.name);
+                          setMeetCompanySuggestions([]);
+                        }}
+                      >
+                        {company.logo && (
+                          <img src={company.logo} alt={company.name} className="w-5 h-5 rounded" />
+                        )}
+                        <div>
+                          <div className="text-white text-sm">{company.name}</div>
+                          {company.domain && (
+                            <div className="text-gray-400 text-xs">{company.domain}</div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {/* Employee Work Email Input */}
+              <div className="mb-4">
+                <label className="block text-gray-300 mb-1">Your Work Email <span className="text-pink-400">*</span></label>
+                <input
+                  type="email"
+                  value={meetEmployeeEmail}
+                  onChange={e => setMeetEmployeeEmail(e.target.value)}
+                  placeholder="your.name@company.com"
+                  className="w-full p-2 rounded bg-[#161b38] border border-[#1f223c] text-white"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setShowMeetLink(false);
+                    setMeetDate("");
+                    setMeetTime("");
+                    setMeetLink("");
+                    setMeetCompanyName("");
+                    setMeetEmployeeEmail("");
+                    setMeetCompanySuggestions([]);
+                  }}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  disabled={
+                    !meetCompanyName.trim() ||
+                    !meetEmployeeEmail.trim() ||
+                    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(meetEmployeeEmail)
+                  }
+                  onClick={() => setShowMeetFinalConfirm(true)}
+                  className={`px-4 py-2 ${
+                    meetCompanyName.trim() && meetEmployeeEmail.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(meetEmployeeEmail)
+                      ? 'bg-gradient-to-r from-green-600 to-blue-500 hover:from-green-700 hover:to-blue-600'
+                      : 'bg-gray-600 cursor-not-allowed'
+                  } text-white rounded-lg text-sm`}
+                >
+                  Share Meet Link
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Google Meet Final Confirmation Modal */}
+      <AnimatePresence>
+        {showMeetFinalConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 px-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0d1224] border border-[#1f223c] rounded-xl shadow-2xl p-6 max-w-md w-full relative"
+            >
+              <button
+                onClick={() => setShowMeetFinalConfirm(false)}
+                className="absolute right-4 top-4 bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full text-white z-10"
+                aria-label="Close confirmation"
+              >
+                <MdClose size={16} />
+              </button>
+              <h3 className="text-white font-bold text-xl mb-4">Confirm Share Meet Link</h3>
+              <p className="text-gray-300 mb-6">
+                Are you sure you want to share this Google Meet link with <span className="text-pink-400 font-medium">Harsh Agrawal</span> on WhatsApp?
+              </p>
+              <div className="mb-4 text-sm text-gray-200">
+                <div><span className="font-semibold text-white">Company:</span> {meetCompanyName}</div>
+                <div><span className="font-semibold text-white">Work Email:</span> {meetEmployeeEmail}</div>
+                <div><span className="font-semibold text-white">Date:</span> {meetDate}</div>
+                <div><span className="font-semibold text-white">Time:</span> {meetTime}</div>
+                <div><span className="font-semibold text-white">Meet Link:</span> <a href={meetLink} className="text-green-400 underline break-all" target="_blank" rel="noopener noreferrer">{meetLink}</a></div>
+              </div>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowMeetFinalConfirm(false)}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSendMeetLink}
+                  className="px-4 py-2 bg-gradient-to-r from-green-600 to-blue-500 hover:from-green-700 hover:to-blue-600 text-white rounded-lg text-sm"
+                >
+                  Yes, Send on WhatsApp
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
