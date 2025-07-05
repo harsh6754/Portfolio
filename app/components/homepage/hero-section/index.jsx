@@ -53,6 +53,14 @@ function HeroSection() {
   const [scheduledInterviews, setScheduledInterviews] = useState([]); // [{date: 'YYYY-MM-DD', time: 'HH:mm'}]
   const [scheduleError, setScheduleError] = useState(""); // For error message
 
+  // New state for visit statistics
+  const [visitStats, setVisitStats] = useState({
+    today: 0,
+    week: 0,
+    month: 0,
+    year: 0,
+  });
+
   useEffect(() => {
     // Hide the banner after 10 seconds and scroll to experience section
     const timer = setTimeout(() => {
@@ -351,6 +359,39 @@ function HeroSection() {
     // Open WhatsApp
     window.open(whatsappUrl, '_blank');
   };
+
+  useEffect(() => {
+    // Helper to get week number
+    function getWeekNumber(date) {
+      const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+      const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+      return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    }
+
+    const now = new Date();
+    const todayKey = `visits_today_${now.getFullYear()}_${now.getMonth()}_${now.getDate()}`;
+    const weekKey = `visits_week_${now.getFullYear()}_${getWeekNumber(now)}`;
+    const monthKey = `visits_month_${now.getFullYear()}_${now.getMonth()}`;
+    const yearKey = `visits_year_${now.getFullYear()}`;
+
+    // Increment counts
+    const todayCount = Number(localStorage.getItem(todayKey) || 0) + 1;
+    const weekCount = Number(localStorage.getItem(weekKey) || 0) + 1;
+    const monthCount = Number(localStorage.getItem(monthKey) || 0) + 1;
+    const yearCount = Number(localStorage.getItem(yearKey) || 0) + 1;
+
+    localStorage.setItem(todayKey, todayCount);
+    localStorage.setItem(weekKey, weekCount);
+    localStorage.setItem(monthKey, monthCount);
+    localStorage.setItem(yearKey, yearCount);
+
+    setVisitStats({
+      today: todayCount,
+      week: weekCount,
+      month: monthCount,
+      year: yearCount,
+    });
+  }, []);
 
   return (
     <section className="relative flex flex-col items-center justify-between py-4 lg:py-12">
@@ -1041,7 +1082,9 @@ function HeroSection() {
             </code>
           </div>
         </div>
+    
       </div>
+
       
       {/* Google Meet Confirmation Modal */}
       <AnimatePresence>
